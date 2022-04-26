@@ -67,15 +67,15 @@ func CreateDisk(disk InfoMKDisk) {
 	}
 	var fit string
 	if strings.ToLower(disk.Fit) == "bf" {
-		fit = "b"
+		fit = "bf"
 	} else if strings.ToLower(disk.Fit) == "wf" {
-		fit = "w"
+		fit = "wf"
 	} else {
-		fit = "f"
+		fit = "ff"
 	}
 
 	var mbr MBR
-	mbr.DskFit = []byte(disk.Fit)
+	mbr.DskFit = []byte(fit)
 	mbr.Tamano = []byte(strconv.Itoa(tamano))
 	mbr.DskSignature = []byte(strconv.Itoa(rand.Intn(10000)))
 	mbr.FechaCreacion = []byte(time.Now().Format(time.RFC850))

@@ -83,7 +83,7 @@ func CrearParticion(part InfoFDisk) {
 				break
 			}
 		}
-		if string(mbr.Partition[index].Status) != "0" {
+		if string(mbr.Partition[index].Status) != "0" && string(mbr.Partition[index].Type) != "l" {
 			fmt.Println("----------------------------------------------------------")
 			fmt.Println("ERROR: No hay espacio para otra partición, Ya ocupó 4")
 			fmt.Println("----------------------------------------------------------")

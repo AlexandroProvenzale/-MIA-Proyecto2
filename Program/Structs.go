@@ -48,15 +48,15 @@ type Partition struct {
 }
 
 type MountedPartition struct {
-	Number 			int
-	Identificador 	string
-	State 			int
-	Type 			int
+	Number        int
+	Identificador string
+	State         int
+	Type          int
 }
 
 type Discos struct {
-	Path  string
-	Letra string
-	State int
-	MountedPartition Partition[10]
+	Path             string
+	Letra            string
+	State            int
+	MountedPartition [10]Partition
 }
