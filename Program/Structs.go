@@ -21,6 +21,11 @@ type InfoMount struct {
 	Name string
 }
 
+type InfoMkfs struct {
+	Id   string
+	Type string
+}
+
 type MBR struct {
 	Tamano        []byte
 	FechaCreacion []byte
@@ -48,15 +53,25 @@ type Partition struct {
 }
 
 type MountedPartition struct {
-	Number        int
+	Letra         string
 	Identificador string
 	State         int
 	Type          int
+	Name          string
 }
 
 type Discos struct {
-	Path             string
-	Letra            string
-	State            int
-	MountedPartition [10]Partition
+	Path       string
+	Number     int
+	State      int
+	Partitions [10]MountedPartition
+}
+
+func ExistName(name string, mbr MBR) bool {
+	for i := 0; i < 4; i++ {
+		if string(mbr.Partition[i].Name) == name {
+			return true
+		}
+	}
+	return false
 }

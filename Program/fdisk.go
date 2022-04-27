@@ -83,7 +83,7 @@ func CrearParticion(part InfoFDisk) {
 				break
 			}
 		}
-		if string(mbr.Partition[index].Status) != "0" && string(mbr.Partition[index].Type) != "l" {
+		if string(mbr.Partition[index].Status) != "0" && strings.ToLower(part.Type) != "l" {
 			fmt.Println("----------------------------------------------------------")
 			fmt.Println("ERROR: No hay espacio para otra partición, Ya ocupó 4")
 			fmt.Println("----------------------------------------------------------")
@@ -106,6 +106,11 @@ func CrearParticion(part InfoFDisk) {
 			mbr.Partition[index].Fit = []byte("ff")
 		default:
 			mbr.Partition[index].Fit = []byte("wf")
+		}
+
+		if strings.ToLower(part.Type) == "fast" || strings.ToLower(part.Type) == "full" {
+			fmt.Println("ERROR: Parametro Type no acepta fast o full en este comando")
+			return
 		}
 
 		if strings.ToLower(part.Type) == "" || strings.ToLower(part.Type) == "p" || strings.ToLower(part.Type) == "e" {

@@ -13,6 +13,7 @@ options {
     var info_MKDISK Program.InfoMKDisk
     var info_FDISK Program.InfoFDisk
     var info_MOUNT Program.InfoMount
+    var info_MKFS Program.InfoMkfs
 
     func initializeMKDISK(MKDISK *Program.InfoMKDisk) {
         MKDISK.Path = ""
@@ -34,6 +35,11 @@ options {
         MOUNT.Path = ""
         MOUNT.Name = ""
     }
+
+    func initializeMKFS(MKFS *Program.InfoMkfs) {
+        MKFS.Id = ""
+        MKFS.Type = ""
+    }
 }
 
 // Rules
@@ -45,6 +51,7 @@ comando: mkdisk_f NEWLINE
        | rmdisk_f NEWLINE
        | fdisk_f NEWLINE
        | mount_f NEWLINE
+       | mkfs_f NEWLINE
        | NEWLINE
 ;
 
@@ -90,8 +97,20 @@ mount_f:
 ;
 
 mountparam:
-    PATH IGUAL E_PATH                   {info_FDISK.Path = strings.ReplaceAll($E_PATH.text, "\"", "")}
-    |   NAME IGUAL e_name=IDENTIFICADOR     {info_FDISK.Name = $e_name.text}
+    PATH IGUAL E_PATH                       {info_MOUNT.Path = strings.ReplaceAll($E_PATH.text, "\"", "")}
+    |   NAME IGUAL e_name=IDENTIFICADOR     {info_MOUNT.Name = $e_name.text}
+;
+
+mkfs_f:
+    MKFS mkfsparam+     {
+                         Program.Formatear(info_MKFS)
+                         initializeMKFS(&info_MKFS)
+                        }
+;
+
+mkfsparam:
+    ID IGUAL E_ID       {info_MKFS.Id = $E_ID.text}
+|   TYPE IGUAL E_TYPE   {info_MKFS.Type = $E_TYPE.text}
 ;
 
 // Tokens
@@ -164,9 +183,13 @@ E_UNIT: K
 E_TYPE: P
      |  E
      |  L
+     |  F A S T
+     |  F U L L
 ;
 E_PATH: PATH1
      |  PATH2
+;
+E_ID:     [0-9]+[a-zA-Z]
 ;
 
 PATH1:          '/' IDENTIFICADOR ('/' IDENTIFICADOR)* ('.dk');

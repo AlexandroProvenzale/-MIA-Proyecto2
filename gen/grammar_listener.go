@@ -29,6 +29,12 @@ type GrammarListener interface {
 	// EnterFdiskparam is called when entering the fdiskparam production.
 	EnterFdiskparam(c *FdiskparamContext)
 
+	// EnterMount_f is called when entering the mount_f production.
+	EnterMount_f(c *Mount_fContext)
+
+	// EnterMountparam is called when entering the mountparam production.
+	EnterMountparam(c *MountparamContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -49,4 +55,10 @@ type GrammarListener interface {
 
 	// ExitFdiskparam is called when exiting the fdiskparam production.
 	ExitFdiskparam(c *FdiskparamContext)
+
+	// ExitMount_f is called when exiting the mount_f production.
+	ExitMount_f(c *Mount_fContext)
+
+	// ExitMountparam is called when exiting the mountparam production.
+	ExitMountparam(c *MountparamContext)
 }
