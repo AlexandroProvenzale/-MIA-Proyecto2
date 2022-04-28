@@ -70,7 +70,7 @@ mkparam:
 ;
 
 rmdisk_f:
-RMDISK IGUAL E_PATH     {Program.RemoveDisk(strings.ReplaceAll($E_PATH.text, "\"", ""))}
+RMDISK PATH IGUAL E_PATH     {Program.RemoveDisk(strings.ReplaceAll($E_PATH.text, "\"", ""))}
 ;
 
 fdisk_f:

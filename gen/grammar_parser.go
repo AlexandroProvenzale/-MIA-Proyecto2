@@ -19,68 +19,69 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 41, 149,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 41, 150,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2,
 	6, 2, 26, 10, 2, 13, 2, 14, 2, 27, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 46, 10,
 	3, 3, 4, 3, 4, 6, 4, 50, 10, 4, 13, 4, 14, 4, 51, 3, 4, 3, 4, 3, 5, 3,
 	5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3,
-	5, 3, 5, 3, 5, 5, 5, 72, 10, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 7, 3,
-	7, 6, 7, 81, 10, 7, 13, 7, 14, 7, 82, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8, 3,
+	5, 3, 5, 3, 5, 5, 5, 72, 10, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3,
+	7, 3, 7, 6, 7, 82, 10, 7, 13, 7, 14, 7, 83, 3, 7, 3, 7, 3, 8, 3, 8, 3,
 	8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3,
-	8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 111, 10, 8, 3,
-	9, 3, 9, 6, 9, 115, 10, 9, 13, 9, 14, 9, 116, 3, 9, 3, 9, 3, 10, 3, 10,
-	3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 5, 10, 129, 10, 10, 3, 11, 3,
-	11, 6, 11, 133, 10, 11, 13, 11, 14, 11, 134, 3, 11, 3, 11, 3, 12, 3, 12,
-	3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 5, 12, 147, 10, 12, 3, 12, 2,
-	2, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 2, 2, 2, 157, 2, 25, 3,
-	2, 2, 2, 4, 45, 3, 2, 2, 2, 6, 47, 3, 2, 2, 2, 8, 71, 3, 2, 2, 2, 10, 73,
-	3, 2, 2, 2, 12, 78, 3, 2, 2, 2, 14, 110, 3, 2, 2, 2, 16, 112, 3, 2, 2,
-	2, 18, 128, 3, 2, 2, 2, 20, 130, 3, 2, 2, 2, 22, 146, 3, 2, 2, 2, 24, 26,
-	5, 4, 3, 2, 25, 24, 3, 2, 2, 2, 26, 27, 3, 2, 2, 2, 27, 25, 3, 2, 2, 2,
-	27, 28, 3, 2, 2, 2, 28, 3, 3, 2, 2, 2, 29, 30, 5, 6, 4, 2, 30, 31, 7, 39,
-	2, 2, 31, 46, 3, 2, 2, 2, 32, 33, 5, 10, 6, 2, 33, 34, 7, 39, 2, 2, 34,
-	46, 3, 2, 2, 2, 35, 36, 5, 12, 7, 2, 36, 37, 7, 39, 2, 2, 37, 46, 3, 2,
-	2, 2, 38, 39, 5, 16, 9, 2, 39, 40, 7, 39, 2, 2, 40, 46, 3, 2, 2, 2, 41,
-	42, 5, 20, 11, 2, 42, 43, 7, 39, 2, 2, 43, 46, 3, 2, 2, 2, 44, 46, 7, 39,
-	2, 2, 45, 29, 3, 2, 2, 2, 45, 32, 3, 2, 2, 2, 45, 35, 3, 2, 2, 2, 45, 38,
-	3, 2, 2, 2, 45, 41, 3, 2, 2, 2, 45, 44, 3, 2, 2, 2, 46, 5, 3, 2, 2, 2,
-	47, 49, 7, 6, 2, 2, 48, 50, 5, 8, 5, 2, 49, 48, 3, 2, 2, 2, 50, 51, 3,
-	2, 2, 2, 51, 49, 3, 2, 2, 2, 51, 52, 3, 2, 2, 2, 52, 53, 3, 2, 2, 2, 53,
-	54, 8, 4, 1, 2, 54, 7, 3, 2, 2, 2, 55, 56, 7, 15, 2, 2, 56, 57, 7, 34,
-	2, 2, 57, 58, 7, 35, 2, 2, 58, 72, 8, 5, 1, 2, 59, 60, 7, 18, 2, 2, 60,
-	61, 7, 34, 2, 2, 61, 62, 7, 30, 2, 2, 62, 72, 8, 5, 1, 2, 63, 64, 7, 16,
-	2, 2, 64, 65, 7, 34, 2, 2, 65, 66, 7, 27, 2, 2, 66, 72, 8, 5, 1, 2, 67,
-	68, 7, 17, 2, 2, 68, 69, 7, 34, 2, 2, 69, 70, 7, 28, 2, 2, 70, 72, 8, 5,
-	1, 2, 71, 55, 3, 2, 2, 2, 71, 59, 3, 2, 2, 2, 71, 63, 3, 2, 2, 2, 71, 67,
-	3, 2, 2, 2, 72, 9, 3, 2, 2, 2, 73, 74, 7, 7, 2, 2, 74, 75, 7, 34, 2, 2,
-	75, 76, 7, 30, 2, 2, 76, 77, 8, 6, 1, 2, 77, 11, 3, 2, 2, 2, 78, 80, 7,
-	8, 2, 2, 79, 81, 5, 14, 8, 2, 80, 79, 3, 2, 2, 2, 81, 82, 3, 2, 2, 2, 82,
-	80, 3, 2, 2, 2, 82, 83, 3, 2, 2, 2, 83, 84, 3, 2, 2, 2, 84, 85, 8, 7, 1,
-	2, 85, 13, 3, 2, 2, 2, 86, 87, 7, 15, 2, 2, 87, 88, 7, 34, 2, 2, 88, 89,
-	7, 35, 2, 2, 89, 111, 8, 8, 1, 2, 90, 91, 7, 18, 2, 2, 91, 92, 7, 34, 2,
-	2, 92, 93, 7, 30, 2, 2, 93, 111, 8, 8, 1, 2, 94, 95, 7, 16, 2, 2, 95, 96,
-	7, 34, 2, 2, 96, 97, 7, 27, 2, 2, 97, 111, 8, 8, 1, 2, 98, 99, 7, 17, 2,
-	2, 99, 100, 7, 34, 2, 2, 100, 101, 7, 28, 2, 2, 101, 111, 8, 8, 1, 2, 102,
-	103, 7, 19, 2, 2, 103, 104, 7, 34, 2, 2, 104, 105, 7, 29, 2, 2, 105, 111,
-	8, 8, 1, 2, 106, 107, 7, 21, 2, 2, 107, 108, 7, 34, 2, 2, 108, 109, 7,
-	37, 2, 2, 109, 111, 8, 8, 1, 2, 110, 86, 3, 2, 2, 2, 110, 90, 3, 2, 2,
-	2, 110, 94, 3, 2, 2, 2, 110, 98, 3, 2, 2, 2, 110, 102, 3, 2, 2, 2, 110,
-	106, 3, 2, 2, 2, 111, 15, 3, 2, 2, 2, 112, 114, 7, 9, 2, 2, 113, 115, 5,
-	18, 10, 2, 114, 113, 3, 2, 2, 2, 115, 116, 3, 2, 2, 2, 116, 114, 3, 2,
-	2, 2, 116, 117, 3, 2, 2, 2, 117, 118, 3, 2, 2, 2, 118, 119, 8, 9, 1, 2,
-	119, 17, 3, 2, 2, 2, 120, 121, 7, 18, 2, 2, 121, 122, 7, 34, 2, 2, 122,
-	123, 7, 30, 2, 2, 123, 129, 8, 10, 1, 2, 124, 125, 7, 21, 2, 2, 125, 126,
-	7, 34, 2, 2, 126, 127, 7, 37, 2, 2, 127, 129, 8, 10, 1, 2, 128, 120, 3,
-	2, 2, 2, 128, 124, 3, 2, 2, 2, 129, 19, 3, 2, 2, 2, 130, 132, 7, 11, 2,
-	2, 131, 133, 5, 22, 12, 2, 132, 131, 3, 2, 2, 2, 133, 134, 3, 2, 2, 2,
-	134, 132, 3, 2, 2, 2, 134, 135, 3, 2, 2, 2, 135, 136, 3, 2, 2, 2, 136,
-	137, 8, 11, 1, 2, 137, 21, 3, 2, 2, 2, 138, 139, 7, 23, 2, 2, 139, 140,
-	7, 34, 2, 2, 140, 141, 7, 31, 2, 2, 141, 147, 8, 12, 1, 2, 142, 143, 7,
-	19, 2, 2, 143, 144, 7, 34, 2, 2, 144, 145, 7, 29, 2, 2, 145, 147, 8, 12,
-	1, 2, 146, 138, 3, 2, 2, 2, 146, 142, 3, 2, 2, 2, 147, 23, 3, 2, 2, 2,
-	12, 27, 45, 51, 71, 82, 110, 116, 128, 134, 146,
+	8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 112, 10,
+	8, 3, 9, 3, 9, 6, 9, 116, 10, 9, 13, 9, 14, 9, 117, 3, 9, 3, 9, 3, 10,
+	3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 5, 10, 130, 10, 10, 3,
+	11, 3, 11, 6, 11, 134, 10, 11, 13, 11, 14, 11, 135, 3, 11, 3, 11, 3, 12,
+	3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 5, 12, 148, 10, 12, 3,
+	12, 2, 2, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 2, 2, 2, 158, 2,
+	25, 3, 2, 2, 2, 4, 45, 3, 2, 2, 2, 6, 47, 3, 2, 2, 2, 8, 71, 3, 2, 2, 2,
+	10, 73, 3, 2, 2, 2, 12, 79, 3, 2, 2, 2, 14, 111, 3, 2, 2, 2, 16, 113, 3,
+	2, 2, 2, 18, 129, 3, 2, 2, 2, 20, 131, 3, 2, 2, 2, 22, 147, 3, 2, 2, 2,
+	24, 26, 5, 4, 3, 2, 25, 24, 3, 2, 2, 2, 26, 27, 3, 2, 2, 2, 27, 25, 3,
+	2, 2, 2, 27, 28, 3, 2, 2, 2, 28, 3, 3, 2, 2, 2, 29, 30, 5, 6, 4, 2, 30,
+	31, 7, 39, 2, 2, 31, 46, 3, 2, 2, 2, 32, 33, 5, 10, 6, 2, 33, 34, 7, 39,
+	2, 2, 34, 46, 3, 2, 2, 2, 35, 36, 5, 12, 7, 2, 36, 37, 7, 39, 2, 2, 37,
+	46, 3, 2, 2, 2, 38, 39, 5, 16, 9, 2, 39, 40, 7, 39, 2, 2, 40, 46, 3, 2,
+	2, 2, 41, 42, 5, 20, 11, 2, 42, 43, 7, 39, 2, 2, 43, 46, 3, 2, 2, 2, 44,
+	46, 7, 39, 2, 2, 45, 29, 3, 2, 2, 2, 45, 32, 3, 2, 2, 2, 45, 35, 3, 2,
+	2, 2, 45, 38, 3, 2, 2, 2, 45, 41, 3, 2, 2, 2, 45, 44, 3, 2, 2, 2, 46, 5,
+	3, 2, 2, 2, 47, 49, 7, 6, 2, 2, 48, 50, 5, 8, 5, 2, 49, 48, 3, 2, 2, 2,
+	50, 51, 3, 2, 2, 2, 51, 49, 3, 2, 2, 2, 51, 52, 3, 2, 2, 2, 52, 53, 3,
+	2, 2, 2, 53, 54, 8, 4, 1, 2, 54, 7, 3, 2, 2, 2, 55, 56, 7, 15, 2, 2, 56,
+	57, 7, 34, 2, 2, 57, 58, 7, 35, 2, 2, 58, 72, 8, 5, 1, 2, 59, 60, 7, 18,
+	2, 2, 60, 61, 7, 34, 2, 2, 61, 62, 7, 30, 2, 2, 62, 72, 8, 5, 1, 2, 63,
+	64, 7, 16, 2, 2, 64, 65, 7, 34, 2, 2, 65, 66, 7, 27, 2, 2, 66, 72, 8, 5,
+	1, 2, 67, 68, 7, 17, 2, 2, 68, 69, 7, 34, 2, 2, 69, 70, 7, 28, 2, 2, 70,
+	72, 8, 5, 1, 2, 71, 55, 3, 2, 2, 2, 71, 59, 3, 2, 2, 2, 71, 63, 3, 2, 2,
+	2, 71, 67, 3, 2, 2, 2, 72, 9, 3, 2, 2, 2, 73, 74, 7, 7, 2, 2, 74, 75, 7,
+	18, 2, 2, 75, 76, 7, 34, 2, 2, 76, 77, 7, 30, 2, 2, 77, 78, 8, 6, 1, 2,
+	78, 11, 3, 2, 2, 2, 79, 81, 7, 8, 2, 2, 80, 82, 5, 14, 8, 2, 81, 80, 3,
+	2, 2, 2, 82, 83, 3, 2, 2, 2, 83, 81, 3, 2, 2, 2, 83, 84, 3, 2, 2, 2, 84,
+	85, 3, 2, 2, 2, 85, 86, 8, 7, 1, 2, 86, 13, 3, 2, 2, 2, 87, 88, 7, 15,
+	2, 2, 88, 89, 7, 34, 2, 2, 89, 90, 7, 35, 2, 2, 90, 112, 8, 8, 1, 2, 91,
+	92, 7, 18, 2, 2, 92, 93, 7, 34, 2, 2, 93, 94, 7, 30, 2, 2, 94, 112, 8,
+	8, 1, 2, 95, 96, 7, 16, 2, 2, 96, 97, 7, 34, 2, 2, 97, 98, 7, 27, 2, 2,
+	98, 112, 8, 8, 1, 2, 99, 100, 7, 17, 2, 2, 100, 101, 7, 34, 2, 2, 101,
+	102, 7, 28, 2, 2, 102, 112, 8, 8, 1, 2, 103, 104, 7, 19, 2, 2, 104, 105,
+	7, 34, 2, 2, 105, 106, 7, 29, 2, 2, 106, 112, 8, 8, 1, 2, 107, 108, 7,
+	21, 2, 2, 108, 109, 7, 34, 2, 2, 109, 110, 7, 37, 2, 2, 110, 112, 8, 8,
+	1, 2, 111, 87, 3, 2, 2, 2, 111, 91, 3, 2, 2, 2, 111, 95, 3, 2, 2, 2, 111,
+	99, 3, 2, 2, 2, 111, 103, 3, 2, 2, 2, 111, 107, 3, 2, 2, 2, 112, 15, 3,
+	2, 2, 2, 113, 115, 7, 9, 2, 2, 114, 116, 5, 18, 10, 2, 115, 114, 3, 2,
+	2, 2, 116, 117, 3, 2, 2, 2, 117, 115, 3, 2, 2, 2, 117, 118, 3, 2, 2, 2,
+	118, 119, 3, 2, 2, 2, 119, 120, 8, 9, 1, 2, 120, 17, 3, 2, 2, 2, 121, 122,
+	7, 18, 2, 2, 122, 123, 7, 34, 2, 2, 123, 124, 7, 30, 2, 2, 124, 130, 8,
+	10, 1, 2, 125, 126, 7, 21, 2, 2, 126, 127, 7, 34, 2, 2, 127, 128, 7, 37,
+	2, 2, 128, 130, 8, 10, 1, 2, 129, 121, 3, 2, 2, 2, 129, 125, 3, 2, 2, 2,
+	130, 19, 3, 2, 2, 2, 131, 133, 7, 11, 2, 2, 132, 134, 5, 22, 12, 2, 133,
+	132, 3, 2, 2, 2, 134, 135, 3, 2, 2, 2, 135, 133, 3, 2, 2, 2, 135, 136,
+	3, 2, 2, 2, 136, 137, 3, 2, 2, 2, 137, 138, 8, 11, 1, 2, 138, 21, 3, 2,
+	2, 2, 139, 140, 7, 23, 2, 2, 140, 141, 7, 34, 2, 2, 141, 142, 7, 31, 2,
+	2, 142, 148, 8, 12, 1, 2, 143, 144, 7, 19, 2, 2, 144, 145, 7, 34, 2, 2,
+	145, 146, 7, 29, 2, 2, 146, 148, 8, 12, 1, 2, 147, 139, 3, 2, 2, 2, 147,
+	143, 3, 2, 2, 2, 148, 23, 3, 2, 2, 2, 12, 27, 45, 51, 71, 83, 111, 117,
+	129, 135, 147,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -998,6 +999,10 @@ func (s *Rmdisk_fContext) RMDISK() antlr.TerminalNode {
 	return s.GetToken(GrammarParserRMDISK, 0)
 }
 
+func (s *Rmdisk_fContext) PATH() antlr.TerminalNode {
+	return s.GetToken(GrammarParserPATH, 0)
+}
+
 func (s *Rmdisk_fContext) IGUAL() antlr.TerminalNode {
 	return s.GetToken(GrammarParserIGUAL, 0)
 }
@@ -1053,10 +1058,14 @@ func (p *GrammarParser) Rmdisk_f() (localctx IRmdisk_fContext) {
 	}
 	{
 		p.SetState(72)
-		p.Match(GrammarParserIGUAL)
+		p.Match(GrammarParserPATH)
 	}
 	{
 		p.SetState(73)
+		p.Match(GrammarParserIGUAL)
+	}
+	{
+		p.SetState(74)
 
 		var _m = p.Match(GrammarParserE_PATH)
 
@@ -1181,20 +1190,20 @@ func (p *GrammarParser) Fdisk_f() (localctx IFdisk_fContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(76)
+		p.SetState(77)
 		p.Match(GrammarParserFDISK)
 	}
-	p.SetState(78)
+	p.SetState(79)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = (((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<GrammarParserSIZE)|(1<<GrammarParserFIT)|(1<<GrammarParserUNIT)|(1<<GrammarParserPATH)|(1<<GrammarParserTYPE)|(1<<GrammarParserNAME))) != 0) {
 		{
-			p.SetState(77)
+			p.SetState(78)
 			p.Fdiskparam()
 		}
 
-		p.SetState(80)
+		p.SetState(81)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1401,22 +1410,22 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 		}
 	}()
 
-	p.SetState(108)
+	p.SetState(109)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GrammarParserSIZE:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(84)
+			p.SetState(85)
 			p.Match(GrammarParserSIZE)
 		}
 		{
-			p.SetState(85)
+			p.SetState(86)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(86)
+			p.SetState(87)
 
 			var _m = p.Match(GrammarParserENTERO)
 
@@ -1434,15 +1443,15 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 	case GrammarParserPATH:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(88)
+			p.SetState(89)
 			p.Match(GrammarParserPATH)
 		}
 		{
-			p.SetState(89)
+			p.SetState(90)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(90)
+			p.SetState(91)
 
 			var _m = p.Match(GrammarParserE_PATH)
 
@@ -1459,15 +1468,15 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 	case GrammarParserFIT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(92)
+			p.SetState(93)
 			p.Match(GrammarParserFIT)
 		}
 		{
-			p.SetState(93)
+			p.SetState(94)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(94)
+			p.SetState(95)
 
 			var _m = p.Match(GrammarParserE_FIT)
 
@@ -1484,15 +1493,15 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 	case GrammarParserUNIT:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(96)
+			p.SetState(97)
 			p.Match(GrammarParserUNIT)
 		}
 		{
-			p.SetState(97)
+			p.SetState(98)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(98)
+			p.SetState(99)
 
 			var _m = p.Match(GrammarParserE_UNIT)
 
@@ -1509,15 +1518,15 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 	case GrammarParserTYPE:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(100)
+			p.SetState(101)
 			p.Match(GrammarParserTYPE)
 		}
 		{
-			p.SetState(101)
+			p.SetState(102)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(102)
+			p.SetState(103)
 
 			var _m = p.Match(GrammarParserE_TYPE)
 
@@ -1534,15 +1543,15 @@ func (p *GrammarParser) Fdiskparam() (localctx IFdiskparamContext) {
 	case GrammarParserNAME:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(104)
+			p.SetState(105)
 			p.Match(GrammarParserNAME)
 		}
 		{
-			p.SetState(105)
+			p.SetState(106)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(106)
+			p.SetState(107)
 
 			var _m = p.Match(GrammarParserIDENTIFICADOR)
 
@@ -1671,20 +1680,20 @@ func (p *GrammarParser) Mount_f() (localctx IMount_fContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(110)
+		p.SetState(111)
 		p.Match(GrammarParserMOUNT)
 	}
-	p.SetState(112)
+	p.SetState(113)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == GrammarParserPATH || _la == GrammarParserNAME {
 		{
-			p.SetState(111)
+			p.SetState(112)
 			p.Mountparam()
 		}
 
-		p.SetState(114)
+		p.SetState(115)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1815,22 +1824,22 @@ func (p *GrammarParser) Mountparam() (localctx IMountparamContext) {
 		}
 	}()
 
-	p.SetState(126)
+	p.SetState(127)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GrammarParserPATH:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(118)
+			p.SetState(119)
 			p.Match(GrammarParserPATH)
 		}
 		{
-			p.SetState(119)
+			p.SetState(120)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(120)
+			p.SetState(121)
 
 			var _m = p.Match(GrammarParserE_PATH)
 
@@ -1847,15 +1856,15 @@ func (p *GrammarParser) Mountparam() (localctx IMountparamContext) {
 	case GrammarParserNAME:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(122)
+			p.SetState(123)
 			p.Match(GrammarParserNAME)
 		}
 		{
-			p.SetState(123)
+			p.SetState(124)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(124)
+			p.SetState(125)
 
 			var _m = p.Match(GrammarParserIDENTIFICADOR)
 
@@ -1984,20 +1993,20 @@ func (p *GrammarParser) Mkfs_f() (localctx IMkfs_fContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(128)
+		p.SetState(129)
 		p.Match(GrammarParserMKFS)
 	}
-	p.SetState(130)
+	p.SetState(131)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for ok := true; ok; ok = _la == GrammarParserTYPE || _la == GrammarParserID {
 		{
-			p.SetState(129)
+			p.SetState(130)
 			p.Mkfsparam()
 		}
 
-		p.SetState(132)
+		p.SetState(133)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2128,22 +2137,22 @@ func (p *GrammarParser) Mkfsparam() (localctx IMkfsparamContext) {
 		}
 	}()
 
-	p.SetState(144)
+	p.SetState(145)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GrammarParserID:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(136)
+			p.SetState(137)
 			p.Match(GrammarParserID)
 		}
 		{
-			p.SetState(137)
+			p.SetState(138)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(138)
+			p.SetState(139)
 
 			var _m = p.Match(GrammarParserE_ID)
 
@@ -2160,15 +2169,15 @@ func (p *GrammarParser) Mkfsparam() (localctx IMkfsparamContext) {
 	case GrammarParserTYPE:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(140)
+			p.SetState(141)
 			p.Match(GrammarParserTYPE)
 		}
 		{
-			p.SetState(141)
+			p.SetState(142)
 			p.Match(GrammarParserIGUAL)
 		}
 		{
-			p.SetState(142)
+			p.SetState(143)
 
 			var _m = p.Match(GrammarParserE_TYPE)
 

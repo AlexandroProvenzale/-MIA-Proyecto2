@@ -2,6 +2,7 @@ package Program
 
 import (
 	"bytes"
+	"encoding/binary"
 	"encoding/gob"
 	"fmt"
 	"log"
@@ -9,6 +10,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 	"unsafe"
 )
@@ -21,7 +23,7 @@ func Formatear(form InfoMkfs) {
 	var path, partName string
 	for esp := range DiscosM { // Verificar cada disco
 		for part := range DiscosM[esp].Partitions { // Verificar cada particion montada por disco en busca del Id
-			if DiscosM[esp].Partitions[part].Identificador == form.Id { // Si encuentra la partición montada
+			if DiscosM[esp].Partitions[part].Identificador == strings.ToUpper(form.Id) { // Si encuentra la partición montada
 				path = DiscosM[esp].Path                      // Guarda el path
 				partName = DiscosM[esp].Partitions[part].Name // Y guarda el nombre de la partición
 				break
@@ -32,7 +34,7 @@ func Formatear(form InfoMkfs) {
 		}
 	}
 	if _, err := os.Stat(path); err != nil { // Verificamos que la ruta esté correctamente almacenada
-		fmt.Println("Error: El disco en la ruta", path, "no existe")
+		fmt.Println("ERROR: El disco en la ruta", path, "no existe")
 		return
 	}
 	file, err := os.OpenFile(path, os.O_RDWR, 0777) // Abrimos el archivo
@@ -111,7 +113,39 @@ func Formatear(form InfoMkfs) {
 	SBnuevo.BlockStart = []byte(strconv.Itoa(blockStart))
 
 	if form.Type == "full" || form.Type == "" {
+		if _, err := file.Seek(int64(inicioParticion), 0); err != nil { // Situamos el puntero en el inicio de la partición
+			log.Fatal(err)
+			return
+		}
+		tamano, _ := strconv.Atoi(string(partition.Size))
+		var b = make([]byte, tamano)
+		for i := range b {
+			b[i] = 0
+		}
+		buff := new(bytes.Buffer)
+		if err := binary.Write(buff, binary.LittleEndian, b); err != nil { // Convirtiendo arreglo de 0s en binario dentro del Buffer
+			log.Fatal(err)
+			return
+		}
+		if _, err := file.Write(buff.Bytes()); err != nil { // Escribiendo el Buffer dentro del archivo
+			log.Fatal(err)
+			return
+		}
+	}
+	if _, err := file.Seek(int64(inicioParticion), 0); err != nil { // Situamos el puntero en el inicio de la partición
+		log.Fatal(err)
+		return
+	}
+	buff = new(bytes.Buffer)
 
+	enc := gob.NewEncoder(buff)
+	if err := enc.Encode(SBnuevo); err != nil {
+		log.Fatal(err)
+		return
+	}
+	if _, err := file.Write(buff.Bytes()); err != nil {
+		log.Fatal(err)
+		return
 	}
 }
 

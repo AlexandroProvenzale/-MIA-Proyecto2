@@ -108,4 +108,5 @@ func MontarDisco(disco InfoMount) {
 	}
 	fmt.Println("El identificador de esta partición es:", DiscosM[i].Partitions[contadorParticion].Identificador)
 	fmt.Println("Disco montado")
+	fmt.Println("----------------------------------------------------------")
 }

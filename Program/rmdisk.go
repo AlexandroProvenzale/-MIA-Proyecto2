@@ -9,8 +9,7 @@ func RemoveDisk(path string) {
 	fmt.Println("-------------------- Eliminar disco --------------------")
 	fmt.Println(path)
 	if _, err := os.Stat(path); err == nil {
-		err := os.Remove(path)
-		if err != nil {
+		if err := os.Remove(path); err != nil {
 			fmt.Println("Error al eliminar el archivo", path)
 		} else {
 			fmt.Println("Archivo eliminado exitosamente!")
