@@ -74,3 +74,15 @@ func (s *BaseGrammarListener) EnterMountparam(ctx *MountparamContext) {}
 
 // ExitMountparam is called when production mountparam is exited.
 func (s *BaseGrammarListener) ExitMountparam(ctx *MountparamContext) {}
+
+// EnterMkfs_f is called when production mkfs_f is entered.
+func (s *BaseGrammarListener) EnterMkfs_f(ctx *Mkfs_fContext) {}
+
+// ExitMkfs_f is called when production mkfs_f is exited.
+func (s *BaseGrammarListener) ExitMkfs_f(ctx *Mkfs_fContext) {}
+
+// EnterMkfsparam is called when production mkfsparam is entered.
+func (s *BaseGrammarListener) EnterMkfsparam(ctx *MkfsparamContext) {}
+
+// ExitMkfsparam is called when production mkfsparam is exited.
+func (s *BaseGrammarListener) ExitMkfsparam(ctx *MkfsparamContext) {}

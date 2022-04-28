@@ -35,6 +35,12 @@ type GrammarListener interface {
 	// EnterMountparam is called when entering the mountparam production.
 	EnterMountparam(c *MountparamContext)
 
+	// EnterMkfs_f is called when entering the mkfs_f production.
+	EnterMkfs_f(c *Mkfs_fContext)
+
+	// EnterMkfsparam is called when entering the mkfsparam production.
+	EnterMkfsparam(c *MkfsparamContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -61,4 +67,10 @@ type GrammarListener interface {
 
 	// ExitMountparam is called when exiting the mountparam production.
 	ExitMountparam(c *MountparamContext)
+
+	// ExitMkfs_f is called when exiting the mkfs_f production.
+	ExitMkfs_f(c *Mkfs_fContext)
+
+	// ExitMkfsparam is called when exiting the mkfsparam production.
+	ExitMkfsparam(c *MkfsparamContext)
 }

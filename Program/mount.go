@@ -11,7 +11,7 @@ import (
 )
 
 var letras = [10]string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"}
-var discos [5]Discos
+var DiscosM [5]Discos
 
 func MontarDisco(disco InfoMount) {
 	if disco.Path == "" {
@@ -39,7 +39,7 @@ func MontarDisco(disco InfoMount) {
 	}(file)
 	var i int
 	for i = 0; i < 5; i++ {
-		if discos[i].State == 0 || discos[i].Path == disco.Path {
+		if DiscosM[i].State == 0 || DiscosM[i].Path == disco.Path {
 			break
 		}
 	}
@@ -87,25 +87,25 @@ func MontarDisco(disco InfoMount) {
 		fmt.Println("No existe una partición con este nombre")
 		return
 	}
-	discos[i].State = 1
-	discos[i].Path = disco.Path
-	discos[i].Number = i + 1
+	DiscosM[i].State = 1
+	DiscosM[i].Path = disco.Path
+	DiscosM[i].Number = i + 1
 	var contadorParticion int
 	for x := 0; x < 10; x++ {
-		mPartition := discos[i].Partitions[x]
+		mPartition := DiscosM[i].Partitions[x]
 		if mPartition.State == 0 {
-			discos[i].Partitions[x].State = 1
+			DiscosM[i].Partitions[x].State = 1
 			if actualPartition < 5 {
-				discos[i].Partitions[x].Name = string(mbr.Partition[actualPartition].Name)
+				DiscosM[i].Partitions[x].Name = string(mbr.Partition[actualPartition].Name)
 			} else {
 				fmt.Println("ERROR: Falló la ejecucuón del montaje")
 			}
-			discos[i].Partitions[x].Letra = letras[x]
-			discos[i].Partitions[x].Identificador = "12" + strconv.Itoa(discos[i].Number) + discos[i].Partitions[x].Letra
+			DiscosM[i].Partitions[x].Letra = letras[x]
+			DiscosM[i].Partitions[x].Identificador = "12" + strconv.Itoa(DiscosM[i].Number) + DiscosM[i].Partitions[x].Letra
 			contadorParticion = x
 			break
 		}
 	}
-	fmt.Println("El identificador de esta partición es:", discos[i].Partitions[contadorParticion].Identificador)
+	fmt.Println("El identificador de esta partición es:", DiscosM[i].Partitions[contadorParticion].Identificador)
 	fmt.Println("Disco montado")
 }

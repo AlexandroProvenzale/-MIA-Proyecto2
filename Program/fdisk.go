@@ -357,8 +357,12 @@ func CrearParticion(part InfoFDisk) {
 		}
 		if strings.ToLower(part.Type) == "" || strings.ToLower(part.Type) == "e" || strings.ToLower(part.Type) == "p" {
 			mbr.Partition[index].Name = []byte(part.Name)
-			fmt.Println("La partición", part.Name, "comienza en", string(mbr.Partition[index].Start))
 			fmt.Println("Partición creada con éxito")
+			fmt.Println("Estado:", string(mbr.Partition[index].Status))
+			fmt.Println("Tamaño:", string(mbr.Partition[index].Size))
+			fmt.Println("Fit:", string(mbr.Partition[index].Fit))
+			fmt.Println("Nombre:", string(mbr.Partition[index].Name))
+			fmt.Println("Start:", string(mbr.Partition[index].Start))
 		}
 	}
 	if _, err := file.Seek(0, 0); err != nil {
