@@ -147,6 +147,8 @@ func Formatear(form InfoMkfs) {
 		log.Fatal(err)
 		return
 	}
+	EscribirBitmaps(bmInodeStart, n, file)
+	EscribirBitmaps(bmBlockStart, n*3, file)
 }
 
 func numeroEstructuras(partition Partition) float64 {
@@ -156,4 +158,24 @@ func numeroEstructuras(partition Partition) float64 {
 	soBloque := int(unsafe.Sizeof(BloqueArchivo{}))
 	resultado := (tamParticion - soSB) / (4 + soInodo + 3*soBloque)
 	return math.Floor(float64(resultado))
+}
+
+func EscribirBitmaps(start, sizeBM int, file *os.File) {
+	if _, err := file.Seek(int64(start), 0); err != nil { // Situamos el puntero en el inicio de la partición
+		log.Fatal(err)
+		return
+	}
+	var b = make([]byte, sizeBM)
+	for i := range b {
+		b[i] = 0
+	}
+	buff := new(bytes.Buffer)
+	if err := binary.Write(buff, binary.LittleEndian, b); err != nil { // Convirtiendo arreglo de 0s en binario dentro del Buffer
+		log.Fatal(err)
+		return
+	}
+	if _, err := file.Write(buff.Bytes()); err != nil { // Escribiendo el Buffer dentro del archivo
+		log.Fatal(err)
+		return
+	}
 }
