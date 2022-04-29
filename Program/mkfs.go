@@ -149,6 +149,7 @@ func Formatear(form InfoMkfs) {
 	}
 	EscribirBitmaps(bmInodeStart, n, file)
 	EscribirBitmaps(bmBlockStart, n*3, file)
+
 }
 
 func numeroEstructuras(partition Partition) float64 {

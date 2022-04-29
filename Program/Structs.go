@@ -1,5 +1,13 @@
 package Program
 
+import (
+	"bytes"
+	"encoding/gob"
+	"log"
+	"strconv"
+	"time"
+)
+
 type InfoMKDisk struct {
 	Path string
 	Fit  string
@@ -98,6 +106,16 @@ type Inodo struct {
 	Perm  []byte
 }
 
+func NewInodo(UID, GID, Size, Type, Perm int) *Inodo {
+	timeStart := []byte(time.Now().Format(time.RFC850))
+	var block [16]int
+	for i := range block {
+		block[i] = -1
+	}
+	Block := IntArrayToBytes(block)
+	return &Inodo{IntToBytes(UID), IntToBytes(GID), IntToBytes(Size), timeStart, timeStart, timeStart, Block, IntToBytes(Type), IntToBytes(Perm)}
+}
+
 type BloqueCarpeta struct {
 	bContent [4]Content
 }
@@ -118,4 +136,33 @@ func ExistName(name string, mbr MBR) bool {
 		}
 	}
 	return false
+}
+
+func BytesToInt(bytes []byte) int {
+	value, _ := strconv.Atoi(string(bytes))
+	return value
+}
+
+func IntToBytes(num int) []byte {
+	value := []byte(strconv.Itoa(num))
+	return value
+}
+
+func IntArrayToBytes(intArray [16]int) []byte {
+	buff := new(bytes.Buffer)
+	enc := gob.NewEncoder(buff)
+	if err := enc.Encode(intArray); err != nil {
+		log.Fatal(err)
+	}
+	return buff.Bytes()
+}
+
+func BytesToIntArray(bytesArray []byte) [16]int {
+	var value [16]int
+	buff := bytes.NewBuffer(bytesArray)
+	dec := gob.NewDecoder(buff)
+	if err := dec.Decode(&value); err != nil {
+		log.Fatal(err)
+	}
+	return value
 }

@@ -128,7 +128,7 @@ func CrearParticion(part InfoFDisk) {
 				mbr.Partition[index].Type = []byte("e")
 			}
 
-			if strings.ToLower(string(mbr.Partition[index].Fit)) == "ff" {
+			if strings.ToLower(string(mbr.DskFit)) == "ff" {
 				fmt.Println("Creando partición con first fit")
 				var trigger bool
 				for i := 0; i < 4; i++ {
