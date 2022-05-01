@@ -1,1 +1,5 @@
 package Program
+
+func EscribirDirectorio() {
+
+}

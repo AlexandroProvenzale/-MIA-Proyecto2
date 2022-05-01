@@ -117,7 +117,7 @@ func NewInodo(UID, GID, Size, Type, Perm int) *Inodo {
 }
 
 type BloqueCarpeta struct {
-	bContent [4]Content
+	BContent [4]Content
 }
 
 type Content struct {
