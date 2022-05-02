@@ -66,6 +66,7 @@ func Formatear(form InfoMkfs) {
 		log.Fatal(err)
 		return
 	}
+	fmt.Println("---------------------------MKFS---------------------------")
 	fmt.Println("-------------------- Disco encontrado --------------------")
 	fmt.Println("Fecha de creación:", string(mbr.FechaCreacion))
 	fmt.Println("Signature:", string(mbr.DskSignature))
@@ -135,21 +136,8 @@ func Formatear(form InfoMkfs) {
 	EscribirBitmaps(bmInodeStart, n, file)
 	EscribirBitmaps(bmBlockStart, n*3, file)
 	HacerRoot(&SBnuevo, file)
-	if _, err := file.Seek(int64(inicioParticion), 0); err != nil { // Situamos el puntero en el inicio de la partición
-		log.Fatal(err)
-		return
-	}
-	buff = new(bytes.Buffer)
-
-	enc := gob.NewEncoder(buff)
-	if err := enc.Encode(SBnuevo); err != nil {
-		log.Fatal(err)
-		return
-	}
-	if _, err := file.Write(buff.Bytes()); err != nil {
-		log.Fatal(err)
-		return
-	}
+	EscribirSuperBloque(&SBnuevo, inicioParticion, file)
+	fmt.Println("FORMATEO COMPLETO")
 }
 
 func numeroEstructuras(partition Partition) float64 {
@@ -182,7 +170,7 @@ func HacerRoot(sb *SuperBloque, file *os.File) {
 func CrearUsuarios(sb *SuperBloque, file *os.File) {
 	users := "1,G,root\n1,U,root,root,123,\n"
 	init := BytesToInt(sb.BlockStart)
-	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el final de la última estructura inodo
+	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el inicio de las estructuras bloque
 		log.Fatal(err)
 		return
 	}
@@ -203,20 +191,45 @@ func CrearUsuarios(sb *SuperBloque, file *os.File) {
 	EscribirBloqueCarpeta(&bloqueArchivosActual, init, file)
 	// ¿Puedo escribir el archivo en este bloque y en este espacio?
 	// Si se comprueba que se puede se procede con el método que identifica cuántos bloques de archivos deben de crearse (Cada uno de 64 bytes) y también lo crea de una vez
-	CrearArchivo(sb, users, 1, 1, 777)
+	CrearArchivo(sb, users, len(users), 1, 1, 777, file)
+	fmt.Println("Archivo users.txt creado en carpeta root ")
 }
 
-func CrearArchivo(sb *SuperBloque, archivo string, UID, GID, perm int) {
-	tamArchivo := unsafe.Sizeof(archivo)
+func CrearArchivo(sb *SuperBloque, archivo string, tamArchivo, UID, GID, perm int, file *os.File) {
 	numBloquesArchivo := int(unsafe.Sizeof(tamArchivo)/64) + 1
-	inodoArchivo := NewInodo(UID, GID, int(unsafe.Sizeof(tamArchivo)), 1, perm)
-	block := BytesToIntArray(inodoArchivo.Block)
-	block[0] = BytesToInt(sb.FirstBlock)
-	inodoArchivo.Block = IntArrayToBytes(block)
+	inodoArchivo := NewInodo(UID, GID, tamArchivo, 1, perm)
+	var posibleInt int
+
 	for contador := 0; contador < numBloquesArchivo; contador++ {
 		//VERIFICAR EN QUÉ APUNTADOR DIRECTO TOCA ESCRIBIR LA INFORMACIÓN DEL ARCHIVO
-		
+		block := BytesToIntArray(inodoArchivo.Block)
+		block[contador] = BytesToInt(sb.FirstBlock)
+		inodoArchivo.Block = IntArrayToBytes(block)
+		bloqueArch := new(BloqueArchivo)
+		var stringApuntador string
+		for i := contador * 64; i < (contador+1)*64; i++ {
+			if i < tamArchivo {
+				if archivo != "" {
+					stringApuntador += string(archivo[i])
+				} else {
+					if tamArchivo != 0 {
+						stringApuntador += strconv.Itoa(posibleInt)
+						posibleInt += 1
+						if posibleInt == 10 {
+							posibleInt = 0
+						}
+					}
+				}
+			} else {
+				break
+			}
+		}
+		bloqueArch.Content = []byte(stringApuntador)
+		EscribirBloqueArchivo(bloqueArch, GetInitBlock(sb), file)
+		ActualizarBitmap(sb.BmBlockStart, &sb.FirstBlock, &sb.FreeBlocksCount, BytesToInt(sb.BlocksCount), file)
 	}
+	EscribirInodo(inodoArchivo, GetInitInode(sb), file)
+	ActualizarBitmap(sb.BmInodeStart, &sb.FirstInode, &sb.FreeInodesCount, BytesToInt(sb.InodesCount), file)
 }
 
 func GetInitInode(sb *SuperBloque) int {
@@ -225,6 +238,24 @@ func GetInitInode(sb *SuperBloque) int {
 
 func GetInitBlock(sb *SuperBloque) int {
 	return BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*BytesToInt(sb.FirstBlock)
+}
+
+func EscribirSuperBloque(super *SuperBloque, init int, file *os.File) {
+	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el inicio de la partición
+		log.Fatal(err)
+		return
+	}
+	buff := new(bytes.Buffer)
+
+	enc := gob.NewEncoder(buff)
+	if err := enc.Encode(super); err != nil {
+		log.Fatal(err)
+		return
+	}
+	if _, err := file.Write(buff.Bytes()); err != nil {
+		log.Fatal(err)
+		return
+	}
 }
 
 func EscribirInodo(inodo *Inodo, init int, file *os.File) {
@@ -245,6 +276,23 @@ func EscribirInodo(inodo *Inodo, init int, file *os.File) {
 }
 
 func EscribirBloqueCarpeta(bloque *BloqueCarpeta, init int, file *os.File) {
+	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el final de la última estructura inodo
+		log.Fatal(err)
+		return
+	}
+	buff := new(bytes.Buffer)
+	enc := gob.NewEncoder(buff)
+	if err := enc.Encode(bloque); err != nil {
+		log.Fatal(err)
+		return
+	}
+	if _, err := file.Write(buff.Bytes()); err != nil {
+		log.Fatal(err)
+		return
+	}
+}
+
+func EscribirBloqueArchivo(bloque *BloqueArchivo, init int, file *os.File) {
 	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el final de la última estructura inodo
 		log.Fatal(err)
 		return
