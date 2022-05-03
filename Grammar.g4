@@ -14,6 +14,7 @@ options {
     var info_FDISK Program.InfoFDisk
     var info_MOUNT Program.InfoMount
     var info_MKFS Program.InfoMkfs
+    var info_LOGIN Program.InfoLogin
 
     func initializeMKDISK(MKDISK *Program.InfoMKDisk) {
         MKDISK.Path = ""
@@ -40,6 +41,12 @@ options {
         MKFS.Id = ""
         MKFS.Type = ""
     }
+
+    func initializeLOGIN(LOGIN *Program.InfoLogin) {
+        LOGIN.User = ""
+        LOGIN.Pass = ""
+        LOGIN.Id = ""
+    }
 }
 
 // Rules
@@ -52,6 +59,7 @@ comando: mkdisk_f NEWLINE
        | fdisk_f NEWLINE
        | mount_f NEWLINE
        | mkfs_f NEWLINE
+       | login_f NEWLINE
        | NEWLINE
 ;
 
@@ -111,6 +119,19 @@ mkfs_f:
 mkfsparam:
     ID IGUAL E_ID       {info_MKFS.Id = $E_ID.text}
 |   TYPE IGUAL E_TYPE   {info_MKFS.Type = $E_TYPE.text}
+;
+
+login_f:
+    LOGIN loginparam+   {
+                         Program.LoginS(info_LOGIN)
+                         initializeLOGIN(&info_LOGIN)
+                        }
+;
+
+loginparam:
+    USR IGUAL e_usr=IDENTIFICADOR  {info_LOGIN.User = $e_usr.text}
+    PASS IGUAL e_pass=COMPLEMENTO  {info_LOGIN.Pass = $e_pass.text}
+    ID IGUAL E_ID                  {info_LOGIN.Id = $E_ID.text}
 ;
 
 // Tokens

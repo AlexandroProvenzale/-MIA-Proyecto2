@@ -34,6 +34,12 @@ type InfoMkfs struct {
 	Type string
 }
 
+type InfoLogin struct {
+	User string
+	Pass string
+	Id   string
+}
+
 type MBR struct {
 	Tamano        []byte
 	FechaCreacion []byte
@@ -127,6 +133,15 @@ type Content struct {
 
 type BloqueArchivo struct {
 	Content []byte
+}
+
+type Sesion struct {
+	Id     string
+	Path   string
+	Name   string
+	User   string
+	Group  string
+	Status bool
 }
 
 func ExistName(name string, mbr MBR) bool {

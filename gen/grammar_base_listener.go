@@ -86,3 +86,15 @@ func (s *BaseGrammarListener) EnterMkfsparam(ctx *MkfsparamContext) {}
 
 // ExitMkfsparam is called when production mkfsparam is exited.
 func (s *BaseGrammarListener) ExitMkfsparam(ctx *MkfsparamContext) {}
+
+// EnterLogin_f is called when production login_f is entered.
+func (s *BaseGrammarListener) EnterLogin_f(ctx *Login_fContext) {}
+
+// ExitLogin_f is called when production login_f is exited.
+func (s *BaseGrammarListener) ExitLogin_f(ctx *Login_fContext) {}
+
+// EnterLoginparam is called when production loginparam is entered.
+func (s *BaseGrammarListener) EnterLoginparam(ctx *LoginparamContext) {}
+
+// ExitLoginparam is called when production loginparam is exited.
+func (s *BaseGrammarListener) ExitLoginparam(ctx *LoginparamContext) {}

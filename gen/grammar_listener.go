@@ -41,6 +41,12 @@ type GrammarListener interface {
 	// EnterMkfsparam is called when entering the mkfsparam production.
 	EnterMkfsparam(c *MkfsparamContext)
 
+	// EnterLogin_f is called when entering the login_f production.
+	EnterLogin_f(c *Login_fContext)
+
+	// EnterLoginparam is called when entering the loginparam production.
+	EnterLoginparam(c *LoginparamContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -73,4 +79,10 @@ type GrammarListener interface {
 
 	// ExitMkfsparam is called when exiting the mkfsparam production.
 	ExitMkfsparam(c *MkfsparamContext)
+
+	// ExitLogin_f is called when exiting the login_f production.
+	ExitLogin_f(c *Login_fContext)
+
+	// ExitLoginparam is called when exiting the loginparam production.
+	ExitLoginparam(c *LoginparamContext)
 }

@@ -15,15 +15,11 @@ import (
 	"unsafe"
 )
 
-func Formatear(form InfoMkfs) {
-	if form.Id == "" {
-		fmt.Println("Error: Parámetro obligatorio Id vacío")
-		return
-	}
+func obtenerParticion(Id string) (string, string) {
 	var path, partName string
 	for esp := range DiscosM { // Verificar cada disco
 		for part := range DiscosM[esp].Partitions { // Verificar cada particion montada por disco en busca del Id
-			if DiscosM[esp].Partitions[part].Identificador == strings.ToUpper(form.Id) { // Si encuentra la partición montada
+			if DiscosM[esp].Partitions[part].Identificador == strings.ToUpper(Id) { // Si encuentra la partición montada
 				path = DiscosM[esp].Path                      // Guarda el path
 				partName = DiscosM[esp].Partitions[part].Name // Y guarda el nombre de la partición
 				break
@@ -33,6 +29,15 @@ func Formatear(form InfoMkfs) {
 			break
 		}
 	}
+	return path, partName
+}
+
+func Formatear(form InfoMkfs) {
+	if form.Id == "" {
+		fmt.Println("Error: Parámetro obligatorio Id vacío")
+		return
+	}
+	path, partName := obtenerParticion(form.Id)
 	if _, err := os.Stat(path); err != nil { // Verificamos que la ruta esté correctamente almacenada
 		fmt.Println("ERROR: El disco en la ruta", path, "no existe")
 		return
@@ -82,6 +87,7 @@ func Formatear(form InfoMkfs) {
 			fmt.Println("Fit:", string(partition.Fit))
 			fmt.Println("Nombre:", string(partition.Name))
 			fmt.Println("Start:", string(partition.Start))
+			fmt.Println("----------------------------------------------------------")
 			break
 		}
 	}
@@ -138,6 +144,22 @@ func Formatear(form InfoMkfs) {
 	HacerRoot(&SBnuevo, file)
 	EscribirSuperBloque(&SBnuevo, inicioParticion, file)
 	fmt.Println("FORMATEO COMPLETO")
+	fmt.Println("Filesystem type:", string(SBnuevo.FilesystemType))
+	fmt.Println("Inodes count:", string(SBnuevo.InodesCount))
+	fmt.Println("Blocks count:", string(SBnuevo.BlocksCount))
+	fmt.Println("Free inodes count:", string(SBnuevo.FreeInodesCount))
+	fmt.Println("Free blocks count:", string(SBnuevo.FreeBlocksCount))
+	fmt.Println("mtime:", string(SBnuevo.Mtime))
+	fmt.Println("mnt count:", string(SBnuevo.MntCount))
+	fmt.Println("magic:", string(SBnuevo.Magic))
+	fmt.Println("Inode size:", string(SBnuevo.InodeSize))
+	fmt.Println("Block size:", string(SBnuevo.BlockSize))
+	fmt.Println("First inode:", string(SBnuevo.FirstInode))
+	fmt.Println("First block:", string(SBnuevo.FirstBlock))
+	fmt.Println("BM inode start:", string(SBnuevo.BmInodeStart))
+	fmt.Println("BM block start:", string(SBnuevo.BmBlockStart))
+	fmt.Println("Inodes start:", string(SBnuevo.InodeStart))
+	fmt.Println("Block start:", string(SBnuevo.BlockStart))
 }
 
 func numeroEstructuras(partition Partition) float64 {
