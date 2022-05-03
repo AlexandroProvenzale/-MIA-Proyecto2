@@ -96,36 +96,36 @@ func Formatear(form InfoMkfs) {
 		return
 	}
 	n := int(numeroEstructuras(partition))
-	inicioParticion, _ := strconv.Atoi(string(partition.Start))
+	inicioParticion := BytesToInt(partition.Start)
+
 	var SBnuevo SuperBloque
 	SBnuevo.FilesystemType = []byte("2")
-	SBnuevo.InodesCount = []byte(strconv.Itoa(n))
-	SBnuevo.BlocksCount = []byte(strconv.Itoa(n * 3))
-	SBnuevo.FreeInodesCount = []byte(strconv.Itoa(n))
-	SBnuevo.FreeBlocksCount = []byte(strconv.Itoa(n * 3))
+	SBnuevo.InodesCount = IntToBytes(n)
+	SBnuevo.BlocksCount = IntToBytes(n * 3)
+	SBnuevo.FreeInodesCount = IntToBytes(n)
+	SBnuevo.FreeBlocksCount = IntToBytes(n * 3)
 	SBnuevo.Mtime = []byte(time.Now().Format(time.RFC850))
-	SBnuevo.MntCount = []byte(strconv.Itoa(1))
+	SBnuevo.MntCount = IntToBytes(1)
 	SBnuevo.Magic = []byte("0xEF53")
-	SBnuevo.InodeSize = []byte(strconv.Itoa(int(unsafe.Sizeof(Inodo{}))))
-	SBnuevo.BlockSize = []byte(strconv.Itoa(int(unsafe.Sizeof(BloqueArchivo{}))))
-	SBnuevo.FirstInode = []byte(strconv.Itoa(0))
-	SBnuevo.FirstBlock = []byte(strconv.Itoa(0))
+	SBnuevo.InodeSize = IntToBytes(int(unsafe.Sizeof(Inodo{})))
+	SBnuevo.BlockSize = IntToBytes(int(unsafe.Sizeof(BloqueArchivo{})))
+	SBnuevo.FirstInode = IntToBytes(0)
+	SBnuevo.FirstBlock = IntToBytes(0)
 	bmInodeStart := inicioParticion + int(unsafe.Sizeof(SuperBloque{})) + 1
-	SBnuevo.BmInodeStart = []byte(strconv.Itoa(bmInodeStart))
+	SBnuevo.BmInodeStart = IntToBytes(bmInodeStart)
 	bmBlockStart := bmInodeStart + n + 1
-	SBnuevo.BmBlockStart = []byte(strconv.Itoa(bmBlockStart))
+	SBnuevo.BmBlockStart = IntToBytes(bmBlockStart)
 	inodeStart := bmBlockStart + n*3 + 1
-	SBnuevo.InodeStart = []byte(strconv.Itoa(inodeStart))
+	SBnuevo.InodeStart = IntToBytes(inodeStart)
 	blockStart := inodeStart + n*int(unsafe.Sizeof(Inodo{})) + 1
-	SBnuevo.BlockStart = []byte(strconv.Itoa(blockStart))
-
+	SBnuevo.BlockStart = IntToBytes(blockStart)
+	
 	if form.Type == "full" || form.Type == "" {
 		if _, err := file.Seek(int64(inicioParticion), 0); err != nil { // Situamos el puntero en el inicio de la partición
 			log.Fatal(err)
 			return
 		}
-		tamano, _ := strconv.Atoi(string(partition.Size))
-		var b = make([]byte, tamano)
+		var b = make([]byte, BytesToInt(partition.Size))
 		for i := range b {
 			b[i] = 0
 		}
@@ -139,9 +139,10 @@ func Formatear(form InfoMkfs) {
 			return
 		}
 	}
-	EscribirBitmaps(bmInodeStart, n, file)
-	EscribirBitmaps(bmBlockStart, n*3, file)
-	HacerRoot(&SBnuevo, file)
+
+	EscribirBitmaps(bmInodeStart, n, file)   // +
+	EscribirBitmaps(bmBlockStart, n*3, file) // +
+	HacerRoot(&SBnuevo, file)                // +
 	EscribirSuperBloque(&SBnuevo, inicioParticion, file)
 	fmt.Println("FORMATEO COMPLETO")
 	fmt.Println("Filesystem type:", string(SBnuevo.FilesystemType))
@@ -342,14 +343,18 @@ func ActualizarBitmap(start []byte, first, free *[]byte, size int, file *os.File
 		return
 	}
 	for i := range bmBytes {
-		if bmBytes[i] == 0 {
-			bmBytes[i] = 1
+		if bmBytes[i] == 48 {
+			bmBytes[i] = 49
 			break
 		}
 		if i+1 == size {
 			fmt.Println("BITMAP LLENO")
 			return
 		}
+	}
+	if _, err := file.Seek(int64(BytesToInt(start)), 0); err != nil { // Situamos el puntero en al final del super bloque
+		log.Fatal(err)
+		return
 	}
 	buff := new(bytes.Buffer)
 	if err := binary.Write(buff, binary.LittleEndian, bmBytes); err != nil { // Convirtiendo arreglo de 0s en binario dentro del Buffer
@@ -371,7 +376,7 @@ func EscribirBitmaps(start, sizeBM int, file *os.File) {
 	}
 	var b = make([]byte, sizeBM)
 	for i := range b {
-		b[i] = 0
+		b[i] = 48
 	}
 	buff := new(bytes.Buffer)
 	if err := binary.Write(buff, binary.LittleEndian, b); err != nil { // Convirtiendo arreglo de 0s en binario dentro del Buffer

@@ -12,3 +12,5 @@ mount -path=/home/proven/mia/disco.dk   -name=Part4
 #MKFS A PARTICIONES
 mkfs -type=fast -id=121a
 mkfs -type=full -id=121c
+
+login -usuario=root -password=123 -id=121a

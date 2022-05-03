@@ -129,9 +129,9 @@ login_f:
 ;
 
 loginparam:
-    USR IGUAL e_usr=IDENTIFICADOR  {info_LOGIN.User = $e_usr.text}
-    PASS IGUAL e_pass=COMPLEMENTO  {info_LOGIN.Pass = $e_pass.text}
-    ID IGUAL E_ID                  {info_LOGIN.Id = $E_ID.text}
+    USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_LOGIN.User = $e_user.text}
+|   PASSW IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {info_LOGIN.Pass = $e_pass.text}
+|   ID IGUAL E_ID                                                   {info_LOGIN.Id = $E_ID.text}
 ;
 
 // Tokens
@@ -181,7 +181,7 @@ MKGRP:      M K G R P;
 // Parametros
 SIZE:       '-' S I Z E;
 FIT:        '-' F I T;
-UNIT:      '-' U N I T;
+UNIT:       '-' U N I T;
 PATH:       '-' P A T H;
 TYPE:       '-' T Y P E;
 DELETEP:    '-' D E L E T E;
@@ -190,7 +190,7 @@ ADD:        '-' A D D;
 ID:         '-' I D;
 FS:         '-' F S;
 USR:        '-' U S U A R I O;
-PASS:       '-' P A S S W O R D;
+PASSW:       '-' P A S S W O R D;
 
 // Entradas
 E_FIT:  B F
@@ -222,6 +222,7 @@ ENTERO:         [0-9]+;
 NEGATIVO:       '-' ENTERO;
 IDENTIFICADOR:  [a-zA-Z][a-zA-Z0-9_]*;
 COMPLEMENTO: [a-zA-Z0-9][a-zA-Z0-9_]*;
+E_USRS: COMPLEMENTO ((' ')* COMPLEMENTO)*;
 
 NEWLINE:'\r'? '\n' | COMENTARIO | EOF;
 WHITESPACE: [ \t]+ -> skip;
