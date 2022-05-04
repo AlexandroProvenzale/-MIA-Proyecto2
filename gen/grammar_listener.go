@@ -47,6 +47,9 @@ type GrammarListener interface {
 	// EnterLoginparam is called when entering the loginparam production.
 	EnterLoginparam(c *LoginparamContext)
 
+	// EnterLogout_f is called when entering the logout_f production.
+	EnterLogout_f(c *Logout_fContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -85,4 +88,7 @@ type GrammarListener interface {
 
 	// ExitLoginparam is called when exiting the loginparam production.
 	ExitLoginparam(c *LoginparamContext)
+
+	// ExitLogout_f is called when exiting the logout_f production.
+	ExitLogout_f(c *Logout_fContext)
 }

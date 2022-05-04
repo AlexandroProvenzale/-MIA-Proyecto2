@@ -11,24 +11,13 @@ import (
 	"unsafe"
 )
 
-var SesionActiva = new(Sesion)
-
-func LoginS(logi InfoLogin) {
-	if logi.User == "" {
-		fmt.Println("Error: Parámetro obligatorio User vacío")
-		return
-	} else if logi.Pass == "" {
-		fmt.Println("Error: Parámetro obligatorio Pass vacío")
-		return
-	} else if logi.Id == "" {
-		fmt.Println("Error: Parámetro obligatorio Id vacío")
+func Mkgroup(name string) {
+	if name == "" {
+		fmt.Println("Error: Parámetro obligatorio Name vacío")
 		return
 	}
-	if SesionActiva.Status {
-		fmt.Println("Ya hay una sesión activa, haga un logout para iniciar sesión con otra cuenta")
-		return
-	}
-	path, partName := obtenerParticion(logi.Id)
+	path := SesionActiva.Path
+	partName := SesionActiva.Name
 	if _, err := os.Stat(path); err != nil { // Verificamos que la ruta esté correctamente almacenada
 		fmt.Println("ERROR: El disco en la ruta", path, "no existe")
 		return
@@ -150,37 +139,17 @@ func LoginS(logi InfoLogin) {
 		archivoExtraido += string(bloqueArchivo.Content)
 	}
 	registros := strings.Split(archivoExtraido, "\n")
+	GUI := 1
 	for i := range registros {
 		registroIndividual := strings.Split(registros[i], ",")
-		if strings.ToUpper(registroIndividual[1]) == "U" {
-			if registroIndividual[3] == logi.User && registroIndividual[4] == logi.Pass {
-				SesionActiva.User = logi.User
-				SesionActiva.Id = strings.ToUpper(logi.Id)
-				SesionActiva.Status = true
-				SesionActiva.Group = registroIndividual[2]
-				SesionActiva.Path = path
-				SesionActiva.Name = partName
-				break
+		if strings.ToUpper(registroIndividual[1]) == "G" {
+			GUI += 1
+			if registroIndividual[2] == name {
+				fmt.Println("ERROR: El grupo", name, "ya existe.")
+				return
 			}
 		}
 	}
-	if SesionActiva.Status {
-		fmt.Println("El usuario", logi.User, "inició sesión correctamente!")
-	} else {
-		fmt.Println("ERROR: Usuario o contraseña incorrecto, compruebe el ID también.")
-	}
-}
-
-func LogoutS() {
-	if SesionActiva.Status {
-		fmt.Println("Sesión del usuario ", SesionActiva.User, " cerrada exitosamente")
-		SesionActiva.User = ""
-		SesionActiva.Id = ""
-		SesionActiva.Status = false
-		SesionActiva.Group = ""
-		SesionActiva.Path = ""
-		SesionActiva.Name = ""
-	} else {
-		fmt.Println("ERROR: No hay ninguna sesión activa actualmente")
-	}
+	archivoExtraido += string(GUI) + ",G," + name + "\n"
+	
 }

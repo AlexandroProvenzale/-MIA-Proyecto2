@@ -14,3 +14,4 @@ mkfs -type=fast -id=121a
 mkfs -type=full -id=121c
 
 login -usuario=root -password=123 -id=121a
+login -usuario=roo -password=123 -id=121a

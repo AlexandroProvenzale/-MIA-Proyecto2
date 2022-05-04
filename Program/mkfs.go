@@ -111,7 +111,7 @@ func Formatear(form InfoMkfs) {
 	SBnuevo.BlockSize = IntToBytes(int(unsafe.Sizeof(BloqueArchivo{})))
 	SBnuevo.FirstInode = IntToBytes(0)
 	SBnuevo.FirstBlock = IntToBytes(0)
-	bmInodeStart := inicioParticion + int(unsafe.Sizeof(SuperBloque{})) + 1
+	bmInodeStart := inicioParticion + int(unsafe.Sizeof(SuperBloque{})) + 50
 	SBnuevo.BmInodeStart = IntToBytes(bmInodeStart)
 	bmBlockStart := bmInodeStart + n + 1
 	SBnuevo.BmBlockStart = IntToBytes(bmBlockStart)
@@ -119,7 +119,7 @@ func Formatear(form InfoMkfs) {
 	SBnuevo.InodeStart = IntToBytes(inodeStart)
 	blockStart := inodeStart + n*int(unsafe.Sizeof(Inodo{})) + 1
 	SBnuevo.BlockStart = IntToBytes(blockStart)
-	
+
 	if form.Type == "full" || form.Type == "" {
 		if _, err := file.Seek(int64(inicioParticion), 0); err != nil { // Situamos el puntero en el inicio de la partición
 			log.Fatal(err)
@@ -256,11 +256,11 @@ func CrearArchivo(sb *SuperBloque, archivo string, tamArchivo, UID, GID, perm in
 }
 
 func GetInitInode(sb *SuperBloque) int {
-	return BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)*BytesToInt(sb.FirstInode)
+	return BytesToInt(sb.InodeStart) + (BytesToInt(sb.InodeSize)+100)*BytesToInt(sb.FirstInode)
 }
 
 func GetInitBlock(sb *SuperBloque) int {
-	return BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*BytesToInt(sb.FirstBlock)
+	return BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*BytesToInt(sb.FirstBlock)
 }
 
 func EscribirSuperBloque(super *SuperBloque, init int, file *os.File) {

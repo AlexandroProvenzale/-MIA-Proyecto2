@@ -98,3 +98,9 @@ func (s *BaseGrammarListener) EnterLoginparam(ctx *LoginparamContext) {}
 
 // ExitLoginparam is called when production loginparam is exited.
 func (s *BaseGrammarListener) ExitLoginparam(ctx *LoginparamContext) {}
+
+// EnterLogout_f is called when production logout_f is entered.
+func (s *BaseGrammarListener) EnterLogout_f(ctx *Logout_fContext) {}
+
+// ExitLogout_f is called when production logout_f is exited.
+func (s *BaseGrammarListener) ExitLogout_f(ctx *Logout_fContext) {}

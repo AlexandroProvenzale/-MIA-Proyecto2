@@ -60,6 +60,8 @@ comando: mkdisk_f NEWLINE
        | mount_f NEWLINE
        | mkfs_f NEWLINE
        | login_f NEWLINE
+       | logout_f NEWLINE
+       | mkgroup_f NEWLINE
        | NEWLINE
 ;
 
@@ -132,6 +134,12 @@ loginparam:
     USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_LOGIN.User = $e_user.text}
 |   PASSW IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {info_LOGIN.Pass = $e_pass.text}
 |   ID IGUAL E_ID                                                   {info_LOGIN.Id = $E_ID.text}
+;
+
+logout_f: LOGOUT    {Program.LogoutS()}
+;
+
+mkgroup_f: MKGRP NAME IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Mkgroup($e_name.text)}
 ;
 
 // Tokens
@@ -222,7 +230,7 @@ ENTERO:         [0-9]+;
 NEGATIVO:       '-' ENTERO;
 IDENTIFICADOR:  [a-zA-Z][a-zA-Z0-9_]*;
 COMPLEMENTO: [a-zA-Z0-9][a-zA-Z0-9_]*;
-E_USRS: COMPLEMENTO ((' ')* COMPLEMENTO)*;
+E_USRS: '"' COMPLEMENTO ((' ')* COMPLEMENTO)* '"';
 
 NEWLINE:'\r'? '\n' | COMENTARIO | EOF;
 WHITESPACE: [ \t]+ -> skip;
