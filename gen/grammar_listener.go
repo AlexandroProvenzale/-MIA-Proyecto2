@@ -50,6 +50,15 @@ type GrammarListener interface {
 	// EnterLogout_f is called when entering the logout_f production.
 	EnterLogout_f(c *Logout_fContext)
 
+	// EnterMkgroup_f is called when entering the mkgroup_f production.
+	EnterMkgroup_f(c *Mkgroup_fContext)
+
+	// EnterMkuser_f is called when entering the mkuser_f production.
+	EnterMkuser_f(c *Mkuser_fContext)
+
+	// EnterMkuserparam is called when entering the mkuserparam production.
+	EnterMkuserparam(c *MkuserparamContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -91,4 +100,13 @@ type GrammarListener interface {
 
 	// ExitLogout_f is called when exiting the logout_f production.
 	ExitLogout_f(c *Logout_fContext)
+
+	// ExitMkgroup_f is called when exiting the mkgroup_f production.
+	ExitMkgroup_f(c *Mkgroup_fContext)
+
+	// ExitMkuser_f is called when exiting the mkuser_f production.
+	ExitMkuser_f(c *Mkuser_fContext)
+
+	// ExitMkuserparam is called when exiting the mkuserparam production.
+	ExitMkuserparam(c *MkuserparamContext)
 }

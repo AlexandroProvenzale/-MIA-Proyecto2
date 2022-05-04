@@ -191,7 +191,7 @@ func HacerRoot(sb *SuperBloque, file *os.File) {
 }
 
 func CrearUsuarios(sb *SuperBloque, file *os.File) {
-	users := "1,G,root\n1,U,root,root,123,\n"
+	users := "1,G,root\n1,U,root,root,123\n"
 	init := BytesToInt(sb.BlockStart)
 	if _, err := file.Seek(int64(init), 0); err != nil { // Situamos el puntero en el inicio de las estructuras bloque
 		log.Fatal(err)
@@ -205,7 +205,7 @@ func CrearUsuarios(sb *SuperBloque, file *os.File) {
 	}
 	buff := bytes.NewBuffer(bdirBytes)
 	dec := gob.NewDecoder(buff)
-	if err := dec.Decode(&bloqueArchivosActual); err != nil { // Obtenemos la información del mbr para buscar la partición
+	if err := dec.Decode(&bloqueArchivosActual); err != nil {
 		log.Fatal(err)
 		return
 	}
@@ -219,7 +219,7 @@ func CrearUsuarios(sb *SuperBloque, file *os.File) {
 }
 
 func CrearArchivo(sb *SuperBloque, archivo string, tamArchivo, UID, GID, perm int, file *os.File) {
-	numBloquesArchivo := int(unsafe.Sizeof(tamArchivo)/64) + 1
+	numBloquesArchivo := int(tamArchivo/64) + 1
 	inodoArchivo := NewInodo(UID, GID, tamArchivo, 1, perm)
 	var posibleInt int
 

@@ -15,6 +15,7 @@ options {
     var info_MOUNT Program.InfoMount
     var info_MKFS Program.InfoMkfs
     var info_LOGIN Program.InfoLogin
+    var info_MKUSER Program.InfoMkuser
 
     func initializeMKDISK(MKDISK *Program.InfoMKDisk) {
         MKDISK.Path = ""
@@ -47,6 +48,11 @@ options {
         LOGIN.Pass = ""
         LOGIN.Id = ""
     }
+
+    func initializeMKUSER(MKUSER *Program.InfoMkuser) {
+        MKUSER.User = ""
+        MKUSER.Pass = ""
+    }
 }
 
 // Rules
@@ -62,6 +68,7 @@ comando: mkdisk_f NEWLINE
        | login_f NEWLINE
        | logout_f NEWLINE
        | mkgroup_f NEWLINE
+       | mkuser_f NEWLINE
        | NEWLINE
 ;
 
@@ -131,15 +138,27 @@ login_f:
 ;
 
 loginparam:
-    USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_LOGIN.User = $e_user.text}
-|   PASSW IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {info_LOGIN.Pass = $e_pass.text}
+    USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_LOGIN.User = strings.ReplaceAll($e_user.text, "\"", "")}
+|   PASSW IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {info_LOGIN.Pass = strings.ReplaceAll($e_pass.text, "\"", "")}
 |   ID IGUAL E_ID                                                   {info_LOGIN.Id = $E_ID.text}
 ;
 
 logout_f: LOGOUT    {Program.LogoutS()}
 ;
 
-mkgroup_f: MKGRP NAME IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Mkgroup($e_name.text)}
+mkgroup_f: MKGRP NAME IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Mkgroup(strings.ReplaceAll($e_name.text, "\"", ""))}
+;
+
+mkuser_f: MKUSR mkuserparam+    {
+                                 Program.Mkuser(info_MKUSER)
+                                 initializeMKUSER(&info_MKUSER)
+                                }
+;
+
+mkuserparam:
+    USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_MKUSER.User = strings.ReplaceAll($e_user.text, "\"", "")}
+|   PWD IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_MKUSER.Pass = strings.ReplaceAll($e_pass.text, "\"", "")}
+|   GRP IGUAL e_group=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)     {info_MKUSER.Grp = strings.ReplaceAll($e_group.text, "\"", "")}
 ;
 
 // Tokens
@@ -185,6 +204,7 @@ MKFS:       M K F S;
 LOGIN:      L O G I N;
 LOGOUT:     L O G O U T;
 MKGRP:      M K G R P;
+MKUSR:      M K U S R;
 
 // Parametros
 SIZE:       '-' S I Z E;
@@ -198,7 +218,9 @@ ADD:        '-' A D D;
 ID:         '-' I D;
 FS:         '-' F S;
 USR:        '-' U S U A R I O;
-PASSW:       '-' P A S S W O R D;
+PASSW:      '-' P A S S W O R D;
+PWD:        '-' P W D;
+GRP:        '-' G R P;
 
 // Entradas
 E_FIT:  B F

@@ -151,16 +151,18 @@ func LoginS(logi InfoLogin) {
 	}
 	registros := strings.Split(archivoExtraido, "\n")
 	for i := range registros {
-		registroIndividual := strings.Split(registros[i], ",")
-		if strings.ToUpper(registroIndividual[1]) == "U" {
-			if registroIndividual[3] == logi.User && registroIndividual[4] == logi.Pass {
-				SesionActiva.User = logi.User
-				SesionActiva.Id = strings.ToUpper(logi.Id)
-				SesionActiva.Status = true
-				SesionActiva.Group = registroIndividual[2]
-				SesionActiva.Path = path
-				SesionActiva.Name = partName
-				break
+		if registros[i] != "" {
+			registroIndividual := strings.Split(registros[i], ",")
+			if strings.ToUpper(registroIndividual[1]) == "U" {
+				if registroIndividual[3] == logi.User && registroIndividual[4] == logi.Pass {
+					SesionActiva.User = logi.User
+					SesionActiva.Id = strings.ToUpper(logi.Id)
+					SesionActiva.Status = true
+					SesionActiva.Group = registroIndividual[2]
+					SesionActiva.Path = path
+					SesionActiva.Name = partName
+					break
+				}
 			}
 		}
 	}

@@ -40,6 +40,12 @@ type InfoLogin struct {
 	Id   string
 }
 
+type InfoMkuser struct {
+	User string
+	Pass string
+	Grp  string
+}
+
 type MBR struct {
 	Tamano        []byte
 	FechaCreacion []byte
