@@ -25,3 +25,5 @@ Mkusr -usuario="user1" -grp=root -pwd=user1
 Mkusr -usuario="user2" -grp="Compi 2" -pwd=user2
 Mkusr -usuario="user3" -grp="Compi 2" -pwd=user3
 Mkusr -usuario="user4" -grp="Compi 2" -pwd=user4
+
+rep -id=121a -Path="/home/parte2/inicial/ext3_tree_1.png" -name=tree

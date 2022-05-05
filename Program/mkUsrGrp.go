@@ -102,7 +102,7 @@ func Mkgroup(name string) {
 		return
 	}
 
-	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize) + 100
+	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)
 	if _, err := file.Seek(int64(initInoArchivo), 0); err != nil { // Situamos el puntero en el inicio del inodo con archivo users
 		log.Fatal(err)
 		return
@@ -128,7 +128,7 @@ func Mkgroup(name string) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return
@@ -147,6 +147,7 @@ func Mkgroup(name string) {
 		}
 		archivoExtraido += string(bloqueArchivo.Content)
 	}
+	numBloquesIniciales := int(len(archivoExtraido)/64) + 1
 	registros := strings.Split(archivoExtraido, "\n")
 	GID := 1
 	for i := range registros {
@@ -169,7 +170,9 @@ func Mkgroup(name string) {
 	for contador := 0; contador < numBloquesArchivo; contador++ {
 		//VERIFICAR EN QUÉ APUNTADOR DIRECTO TOCA ESCRIBIR LA INFORMACIÓN DEL ARCHIVO
 		block := BytesToIntArray(inodoArchivo.Block)
-		block[contador] = BytesToInt(sb.FirstBlock)
+		if block[contador] == -1 {
+			block[contador] = BytesToInt(sb.FirstBlock)
+		}
 		inodoArchivo.Block = IntArrayToBytes(block)
 		bloqueArch := new(BloqueArchivo)
 		var stringApuntador string
@@ -191,11 +194,15 @@ func Mkgroup(name string) {
 			}
 		}
 		bloqueArch.Content = []byte(stringApuntador)
-		initBloArchivo := BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*(contador+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(contador+1)
 		EscribirBloqueArchivo(bloqueArch, initBloArchivo, file)
+		if contador >= numBloquesIniciales {
+			ActualizarBitmap(sb.BmBlockStart, &sb.FirstBlock, &sb.FreeBlocksCount, BytesToInt(sb.BlocksCount), file)
+		}
 	}
 	inodoArchivo.Size = IntToBytes(len(archivoExtraido))
 	EscribirInodo(&inodoArchivo, initInoArchivo, file)
+	EscribirSuperBloque(&sb, BytesToInt(partition.Start), file)
 	fmt.Println("Grupo", name, "creado con éxito.")
 }
 
@@ -302,7 +309,7 @@ func Mkuser(mk InfoMkuser) {
 		return
 	}
 
-	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize) + 100
+	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)
 	if _, err := file.Seek(int64(initInoArchivo), 0); err != nil { // Situamos el puntero en el inicio del inodo con archivo users
 		log.Fatal(err)
 		return
@@ -328,7 +335,7 @@ func Mkuser(mk InfoMkuser) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return
@@ -347,6 +354,7 @@ func Mkuser(mk InfoMkuser) {
 		}
 		archivoExtraido += string(bloqueArchivo.Content)
 	}
+	numBloquesIniciales := int(len(archivoExtraido)/64) + 1
 	registros := strings.Split(archivoExtraido, "\n")
 	UID := 1
 	existeGrupo := false
@@ -379,7 +387,9 @@ func Mkuser(mk InfoMkuser) {
 	for contador := 0; contador < numBloquesArchivo; contador++ {
 		//VERIFICAR EN QUÉ APUNTADOR DIRECTO TOCA ESCRIBIR LA INFORMACIÓN DEL ARCHIVO
 		block := BytesToIntArray(inodoArchivo.Block)
-		block[contador] = BytesToInt(sb.FirstBlock)
+		if block[contador] == -1 {
+			block[contador] = BytesToInt(sb.FirstBlock)
+		}
 		inodoArchivo.Block = IntArrayToBytes(block)
 		bloqueArch := new(BloqueArchivo)
 		var stringApuntador string
@@ -401,10 +411,14 @@ func Mkuser(mk InfoMkuser) {
 			}
 		}
 		bloqueArch.Content = []byte(stringApuntador)
-		initBloArchivo := BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*(contador+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(contador+1)
 		EscribirBloqueArchivo(bloqueArch, initBloArchivo, file)
+		if contador >= numBloquesIniciales {
+			ActualizarBitmap(sb.BmBlockStart, &sb.FirstBlock, &sb.FreeBlocksCount, BytesToInt(sb.BlocksCount), file)
+		}
 	}
 	inodoArchivo.Size = IntToBytes(len(archivoExtraido))
 	EscribirInodo(&inodoArchivo, initInoArchivo, file)
+	EscribirSuperBloque(&sb, BytesToInt(partition.Start), file)
 	fmt.Println("Usuario", mk.User, "del grupo", mk.Grp, "creado con éxito")
 }

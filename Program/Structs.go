@@ -46,6 +46,13 @@ type InfoMkuser struct {
 	Grp  string
 }
 
+type InfoRep struct {
+	Name string
+	Path string
+	Id   string
+	Ruta string
+}
+
 type MBR struct {
 	Tamano        []byte
 	FechaCreacion []byte

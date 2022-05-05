@@ -104,7 +104,7 @@ func LoginS(logi InfoLogin) {
 		return
 	}
 
-	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize) + 100
+	initInoArchivo := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)
 	if _, err := file.Seek(int64(initInoArchivo), 0); err != nil { // Situamos el puntero en el inicio del inodo con archivo users
 		log.Fatal(err)
 		return
@@ -130,7 +130,7 @@ func LoginS(logi InfoLogin) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return

@@ -16,6 +16,7 @@ options {
     var info_MKFS Program.InfoMkfs
     var info_LOGIN Program.InfoLogin
     var info_MKUSER Program.InfoMkuser
+    var info_REP Program.InfoRep
 
     func initializeMKDISK(MKDISK *Program.InfoMKDisk) {
         MKDISK.Path = ""
@@ -53,6 +54,13 @@ options {
         MKUSER.User = ""
         MKUSER.Pass = ""
     }
+
+    func initializeREP(REP *Program.InfoRep) {
+        REP.Name = ""
+        REP.Path = ""
+        REP.Id = ""
+        REP.Ruta = ""
+    }
 }
 
 // Rules
@@ -69,6 +77,7 @@ comando: mkdisk_f NEWLINE
        | logout_f NEWLINE
        | mkgroup_f NEWLINE
        | mkuser_f NEWLINE
+       | rep_f NEWLINE
        | NEWLINE
 ;
 
@@ -161,6 +170,19 @@ mkuserparam:
 |   GRP IGUAL e_group=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)     {info_MKUSER.Grp = strings.ReplaceAll($e_group.text, "\"", "")}
 ;
 
+rep_f: REP repparam+    {
+                         Program.Reportar(info_REP)
+                         initializeREP(&info_REP)
+                        }
+;
+
+repparam:
+    NAME IGUAL E_REP    {info_REP.Name = $E_REP.text}
+|   PATH IGUAL E_PATH   {info_REP.Path = strings.ReplaceAll($E_PATH.text, "\"", "")}
+|   ID IGUAL E_ID       {info_REP.Id = $E_ID.text}
+|   RUTA IGUAL E_PATH   {info_REP.Ruta = strings.ReplaceAll($E_PATH.text, "\"", "")}
+;
+
 // Tokens
 
 // Comandos
@@ -221,6 +243,7 @@ USR:        '-' U S U A R I O;
 PASSW:      '-' P A S S W O R D;
 PWD:        '-' P W D;
 GRP:        '-' G R P;
+RUTA:       '-' R U T A;
 
 // Entradas
 E_FIT:  B F
@@ -242,9 +265,14 @@ E_PATH: PATH1
 ;
 E_ID:     [0-9]+[a-zA-Z]
 ;
+E_REP: D I S K
+    |  T R E E
+    |  F I L E
+;
 
 PATH1:          '/' IDENTIFICADOR ('/' IDENTIFICADOR)* ('.dk');
-PATH2:          '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* ('.dk') '"';
+PATH2:          '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* TERMINAL '"';
+TERMINAL:       '.' (D K | T X T | D S K | J P G | P N G);
 
 IGUAL: '=';
 

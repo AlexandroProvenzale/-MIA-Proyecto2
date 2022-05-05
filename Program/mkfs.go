@@ -107,8 +107,8 @@ func Formatear(form InfoMkfs) {
 	SBnuevo.Mtime = []byte(time.Now().Format(time.RFC850))
 	SBnuevo.MntCount = IntToBytes(1)
 	SBnuevo.Magic = []byte("0xEF53")
-	SBnuevo.InodeSize = IntToBytes(int(unsafe.Sizeof(Inodo{})))
-	SBnuevo.BlockSize = IntToBytes(int(unsafe.Sizeof(BloqueArchivo{})))
+	SBnuevo.InodeSize = IntToBytes(int(unsafe.Sizeof(Inodo{})) + 100)
+	SBnuevo.BlockSize = IntToBytes(int(unsafe.Sizeof(BloqueArchivo{})) + 200)
 	SBnuevo.FirstInode = IntToBytes(0)
 	SBnuevo.FirstBlock = IntToBytes(0)
 	bmInodeStart := inicioParticion + int(unsafe.Sizeof(SuperBloque{})) + 50
@@ -209,7 +209,7 @@ func CrearUsuarios(sb *SuperBloque, file *os.File) {
 		log.Fatal(err)
 		return
 	}
-	bloqueArchivosActual.BContent[2].Inodo = sb.FirstBlock
+	bloqueArchivosActual.BContent[2].Inodo = sb.FirstInode
 	bloqueArchivosActual.BContent[2].Name = []byte("users.txt")
 	EscribirBloqueCarpeta(&bloqueArchivosActual, init, file)
 	// ¿Puedo escribir el archivo en este bloque y en este espacio?
@@ -256,11 +256,11 @@ func CrearArchivo(sb *SuperBloque, archivo string, tamArchivo, UID, GID, perm in
 }
 
 func GetInitInode(sb *SuperBloque) int {
-	return BytesToInt(sb.InodeStart) + (BytesToInt(sb.InodeSize)+100)*BytesToInt(sb.FirstInode)
+	return BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)*BytesToInt(sb.FirstInode)
 }
 
 func GetInitBlock(sb *SuperBloque) int {
-	return BytesToInt(sb.BlockStart) + (BytesToInt(sb.BlockSize)+200)*BytesToInt(sb.FirstBlock)
+	return BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*BytesToInt(sb.FirstBlock)
 }
 
 func EscribirSuperBloque(super *SuperBloque, init int, file *os.File) {

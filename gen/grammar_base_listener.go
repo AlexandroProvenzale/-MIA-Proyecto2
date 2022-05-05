@@ -122,3 +122,15 @@ func (s *BaseGrammarListener) EnterMkuserparam(ctx *MkuserparamContext) {}
 
 // ExitMkuserparam is called when production mkuserparam is exited.
 func (s *BaseGrammarListener) ExitMkuserparam(ctx *MkuserparamContext) {}
+
+// EnterRep_f is called when production rep_f is entered.
+func (s *BaseGrammarListener) EnterRep_f(ctx *Rep_fContext) {}
+
+// ExitRep_f is called when production rep_f is exited.
+func (s *BaseGrammarListener) ExitRep_f(ctx *Rep_fContext) {}
+
+// EnterRepparam is called when production repparam is entered.
+func (s *BaseGrammarListener) EnterRepparam(ctx *RepparamContext) {}
+
+// ExitRepparam is called when production repparam is exited.
+func (s *BaseGrammarListener) ExitRepparam(ctx *RepparamContext) {}

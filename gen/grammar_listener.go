@@ -59,6 +59,12 @@ type GrammarListener interface {
 	// EnterMkuserparam is called when entering the mkuserparam production.
 	EnterMkuserparam(c *MkuserparamContext)
 
+	// EnterRep_f is called when entering the rep_f production.
+	EnterRep_f(c *Rep_fContext)
+
+	// EnterRepparam is called when entering the repparam production.
+	EnterRepparam(c *RepparamContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -109,4 +115,10 @@ type GrammarListener interface {
 
 	// ExitMkuserparam is called when exiting the mkuserparam production.
 	ExitMkuserparam(c *MkuserparamContext)
+
+	// ExitRep_f is called when exiting the rep_f production.
+	ExitRep_f(c *Rep_fContext)
+
+	// ExitRepparam is called when exiting the repparam production.
+	ExitRepparam(c *RepparamContext)
 }
