@@ -128,7 +128,7 @@ func Mkgroup(name string) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*block[0]
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return
@@ -194,7 +194,7 @@ func Mkgroup(name string) {
 			}
 		}
 		bloqueArch.Content = []byte(stringApuntador)
-		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(contador+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*block[contador]
 		EscribirBloqueArchivo(bloqueArch, initBloArchivo, file)
 		if contador >= numBloquesIniciales {
 			ActualizarBitmap(sb.BmBlockStart, &sb.FirstBlock, &sb.FreeBlocksCount, BytesToInt(sb.BlocksCount), file)
@@ -335,7 +335,7 @@ func Mkuser(mk InfoMkuser) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*block[i]
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return
@@ -411,7 +411,7 @@ func Mkuser(mk InfoMkuser) {
 			}
 		}
 		bloqueArch.Content = []byte(stringApuntador)
-		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(contador+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*block[contador]
 		EscribirBloqueArchivo(bloqueArch, initBloArchivo, file)
 		if contador >= numBloquesIniciales {
 			ActualizarBitmap(sb.BmBlockStart, &sb.FirstBlock, &sb.FreeBlocksCount, BytesToInt(sb.BlocksCount), file)

@@ -130,7 +130,7 @@ func LoginS(logi InfoLogin) {
 		if block[i] == -1 {
 			break
 		}
-		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*(i+1)
+		initBloArchivo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)*block[i]
 		if _, err := file.Seek(int64(initBloArchivo), 0); err != nil {
 			log.Fatal(err)
 			return
