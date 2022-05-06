@@ -46,6 +46,18 @@ type InfoMkuser struct {
 	Grp  string
 }
 
+type InfoMkfile struct {
+	Path string
+	R    string
+	Size string
+	Cont string
+}
+
+type InfoMkdir struct {
+	Path string
+	P    bool
+}
+
 type InfoRep struct {
 	Name string
 	Path string
@@ -149,6 +161,9 @@ type BloqueArchivo struct {
 }
 
 type Sesion struct {
+	UID    int
+	GID    int
+	Perm   int
 	Id     string
 	Path   string
 	Name   string

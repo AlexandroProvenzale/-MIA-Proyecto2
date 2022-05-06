@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"unsafe"
 )
@@ -155,12 +156,34 @@ func LoginS(logi InfoLogin) {
 			registroIndividual := strings.Split(registros[i], ",")
 			if strings.ToUpper(registroIndividual[1]) == "U" {
 				if registroIndividual[3] == logi.User && registroIndividual[4] == logi.Pass {
+					if registroIndividual[0] == "0" {
+						fmt.Println("El usuario no existe, fue eliminado con anterioridad.")
+						return
+					} else if logi.User == "root" {
+						SesionActiva.Perm = 777
+					} else {
+						SesionActiva.Perm = 664
+					}
 					SesionActiva.User = logi.User
 					SesionActiva.Id = strings.ToUpper(logi.Id)
 					SesionActiva.Status = true
 					SesionActiva.Group = registroIndividual[2]
+					UID, _ := strconv.Atoi(registroIndividual[0])
+					SesionActiva.UID = UID
 					SesionActiva.Path = path
 					SesionActiva.Name = partName
+					break
+				}
+			}
+		}
+	}
+	for i := range registros {
+		if registros[i] != "" {
+			registroIndividual := strings.Split(registros[i], ",")
+			if strings.ToUpper(registroIndividual[1]) == "G" {
+				if registroIndividual[2] == SesionActiva.Group {
+					GID, _ := strconv.Atoi(registroIndividual[0])
+					SesionActiva.GID = GID
 					break
 				}
 			}

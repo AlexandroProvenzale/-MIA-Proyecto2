@@ -16,6 +16,7 @@ options {
     var info_MKFS Program.InfoMkfs
     var info_LOGIN Program.InfoLogin
     var info_MKUSER Program.InfoMkuser
+    var info_MKDIR Program.InfoMkdir
     var info_REP Program.InfoRep
 
     func initializeMKDISK(MKDISK *Program.InfoMKDisk) {
@@ -55,6 +56,11 @@ options {
         MKUSER.Pass = ""
     }
 
+    func initializeMKDIR(MKDIR *Program.InfoMkdir) {
+        MKDIR.Path = ""
+        MKDIR.P    = false
+    }
+
     func initializeREP(REP *Program.InfoRep) {
         REP.Name = ""
         REP.Path = ""
@@ -77,6 +83,7 @@ comando: mkdisk_f NEWLINE
        | logout_f NEWLINE
        | mkgroup_f NEWLINE
        | mkuser_f NEWLINE
+       | mkdir_f NEWLINE
        | rep_f NEWLINE
        | NEWLINE
 ;
@@ -170,6 +177,17 @@ mkuserparam:
 |   GRP IGUAL e_group=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)     {info_MKUSER.Grp = strings.ReplaceAll($e_group.text, "\"", "")}
 ;
 
+mkdir_f: MKDIR mkdirparam+  {
+                             Program.EscribirDirectorio(info_MKDIR)
+                             initializeMKDIR(&info_MKDIR)
+                            }
+;
+
+mkdirparam:
+    PATH IGUAL E_PATHH     {info_MKDIR.Path = strings.ReplaceAll($E_PATHH.text, "\"", "")}
+|   '-'('p'|'P')             {info_MKDIR.P = true}
+;
+
 rep_f: REP repparam+    {
                          Program.Reportar(info_REP)
                          initializeREP(&info_REP)
@@ -227,6 +245,7 @@ LOGIN:      L O G I N;
 LOGOUT:     L O G O U T;
 MKGRP:      M K G R P;
 MKUSR:      M K U S R;
+MKDIR:      M K D I R;
 
 // Parametros
 SIZE:       '-' S I Z E;
@@ -263,6 +282,9 @@ E_TYPE: P
 E_PATH: PATH1
      |  PATH2
 ;
+E_PATHH: PATHH1
+      |  PATHH2
+;
 E_ID:     [0-9]+[a-zA-Z]
 ;
 E_REP: D I S K
@@ -270,9 +292,11 @@ E_REP: D I S K
     |  F I L E
 ;
 
-PATH1:          '/' IDENTIFICADOR ('/' IDENTIFICADOR)* ('.dk');
+PATH1:          '/' IDENTIFICADOR ('/' IDENTIFICADOR)* TERMINAL;
 PATH2:          '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* TERMINAL '"';
 TERMINAL:       '.' (D K | T X T | D S K | J P G | P N G);
+PATHH1:         '/' IDENTIFICADOR ('/' IDENTIFICADOR)*;
+PATHH2:         '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* '"';
 
 IGUAL: '=';
 

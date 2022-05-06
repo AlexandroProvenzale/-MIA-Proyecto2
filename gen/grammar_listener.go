@@ -59,6 +59,12 @@ type GrammarListener interface {
 	// EnterMkuserparam is called when entering the mkuserparam production.
 	EnterMkuserparam(c *MkuserparamContext)
 
+	// EnterMkdir_f is called when entering the mkdir_f production.
+	EnterMkdir_f(c *Mkdir_fContext)
+
+	// EnterMkdirparam is called when entering the mkdirparam production.
+	EnterMkdirparam(c *MkdirparamContext)
+
 	// EnterRep_f is called when entering the rep_f production.
 	EnterRep_f(c *Rep_fContext)
 
@@ -115,6 +121,12 @@ type GrammarListener interface {
 
 	// ExitMkuserparam is called when exiting the mkuserparam production.
 	ExitMkuserparam(c *MkuserparamContext)
+
+	// ExitMkdir_f is called when exiting the mkdir_f production.
+	ExitMkdir_f(c *Mkdir_fContext)
+
+	// ExitMkdirparam is called when exiting the mkdirparam production.
+	ExitMkdirparam(c *MkdirparamContext)
 
 	// ExitRep_f is called when exiting the rep_f production.
 	ExitRep_f(c *Rep_fContext)

@@ -125,7 +125,7 @@ func ReporteTree(path, partName, repo string) {
 }
 
 func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounter, blockCounter *int, file *os.File) {
-	if _, err := file.Seek(int64(initInode), 0); err != nil { // Situamos el puntero en el inicio del inodo con archivo users
+	if _, err := file.Seek(int64(initInode), 0); err != nil {
 		log.Fatal(err)
 		return
 	}
@@ -137,7 +137,7 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 	}
 	buff := bytes.NewBuffer(inodeBytes)
 	dec := gob.NewDecoder(buff)
-	if err := dec.Decode(&inodoActual); err != nil { // Obtenemos la información del archivo users
+	if err := dec.Decode(&inodoActual); err != nil { // Obtenemos la información del inodo
 		log.Fatal(err)
 		return
 	}
@@ -201,16 +201,10 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 					break
 				} else if string(bloqueCarpeta.BContent[i].Name) != "." && string(bloqueCarpeta.BContent[i].Name) != ".." {
 					//inodeCounter
-					if BytesToInt(bloqueCarpeta.BContent[i].Inodo) == *inodeCounter+1 {
-						*inodeCounter += 1
-					} else {
-						log.Fatal("ERROR: GRAFICASTE MAL")
-						return
-					}
+					*inodeCounter += 1
 					*digraph += "block" + strconv.Itoa(*blockCounter) + ":b" + strconv.Itoa(i) + " -> inode" + strconv.Itoa(*inodeCounter) + ":i" + string(bloqueCarpeta.BContent[i].Inodo) + "\n"
 					initIno := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)**inodeCounter
 					recursivamente(sb, digraph, initIno, inodeCounter, blockCounter, file)
-					return
 				}
 			}
 		} else if BytesToInt(inodoActual.Type) == 1 {
