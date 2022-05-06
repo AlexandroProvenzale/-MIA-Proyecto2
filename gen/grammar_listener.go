@@ -56,6 +56,9 @@ type GrammarListener interface {
 	// EnterMkuser_f is called when entering the mkuser_f production.
 	EnterMkuser_f(c *Mkuser_fContext)
 
+	// EnterRmuser_f is called when entering the rmuser_f production.
+	EnterRmuser_f(c *Rmuser_fContext)
+
 	// EnterMkuserparam is called when entering the mkuserparam production.
 	EnterMkuserparam(c *MkuserparamContext)
 
@@ -118,6 +121,9 @@ type GrammarListener interface {
 
 	// ExitMkuser_f is called when exiting the mkuser_f production.
 	ExitMkuser_f(c *Mkuser_fContext)
+
+	// ExitRmuser_f is called when exiting the rmuser_f production.
+	ExitRmuser_f(c *Rmuser_fContext)
 
 	// ExitMkuserparam is called when exiting the mkuserparam production.
 	ExitMkuserparam(c *MkuserparamContext)

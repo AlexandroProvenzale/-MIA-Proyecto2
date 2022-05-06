@@ -83,6 +83,7 @@ comando: mkdisk_f NEWLINE
        | logout_f NEWLINE
        | mkgroup_f NEWLINE
        | mkuser_f NEWLINE
+       | rmuser_f NEWLINE
        | mkdir_f NEWLINE
        | rep_f NEWLINE
        | NEWLINE
@@ -171,6 +172,9 @@ mkuser_f: MKUSR mkuserparam+    {
                                 }
 ;
 
+rmuser_f: RMUSR USR IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Rmuser(strings.ReplaceAll($e_name.text, "\"", ""))}
+;
+
 mkuserparam:
     USR IGUAL e_user=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_MKUSER.User = strings.ReplaceAll($e_user.text, "\"", "")}
 |   PWD IGUAL e_pass=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)      {info_MKUSER.Pass = strings.ReplaceAll($e_pass.text, "\"", "")}
@@ -245,6 +249,7 @@ LOGIN:      L O G I N;
 LOGOUT:     L O G O U T;
 MKGRP:      M K G R P;
 MKUSR:      M K U S R;
+RMUSR:      R M U S R;
 MKDIR:      M K D I R;
 
 // Parametros

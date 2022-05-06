@@ -117,6 +117,12 @@ func (s *BaseGrammarListener) EnterMkuser_f(ctx *Mkuser_fContext) {}
 // ExitMkuser_f is called when production mkuser_f is exited.
 func (s *BaseGrammarListener) ExitMkuser_f(ctx *Mkuser_fContext) {}
 
+// EnterRmuser_f is called when production rmuser_f is entered.
+func (s *BaseGrammarListener) EnterRmuser_f(ctx *Rmuser_fContext) {}
+
+// ExitRmuser_f is called when production rmuser_f is exited.
+func (s *BaseGrammarListener) ExitRmuser_f(ctx *Rmuser_fContext) {}
+
 // EnterMkuserparam is called when production mkuserparam is entered.
 func (s *BaseGrammarListener) EnterMkuserparam(ctx *MkuserparamContext) {}
 
