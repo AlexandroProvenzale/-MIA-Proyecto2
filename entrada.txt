@@ -20,6 +20,7 @@ login -usuario=roo -password=123 -id=121a
 mkgrp -naMe=Archivos
 mkgrp -NamE=Arqui
 mkgrp -name="Orga"
+rmgrp -name=Orga
 
 Mkusr -usuario="user1" -grp=root -pwd=user1
 Mkusr -usuario="user2" -grp="Arqui" -pwd=user2
@@ -28,3 +29,4 @@ Rmusr -usuario="user2"
 Mkusr -usuario="user3" -grp="Compi 2" -pwd=user3
 Mkusr -usuario="user4" -grp="Compi 2" -pwd=user4
 
+rep -id=121a -Path="/home/parte2/rem/ext2_tree_1.png" -name=tree

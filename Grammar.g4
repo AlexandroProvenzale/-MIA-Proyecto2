@@ -82,6 +82,7 @@ comando: mkdisk_f NEWLINE
        | login_f NEWLINE
        | logout_f NEWLINE
        | mkgroup_f NEWLINE
+       | rmgroup_f NEWLINE
        | mkuser_f NEWLINE
        | rmuser_f NEWLINE
        | mkdir_f NEWLINE
@@ -164,6 +165,9 @@ logout_f: LOGOUT    {Program.LogoutS()}
 ;
 
 mkgroup_f: MKGRP NAME IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Mkgroup(strings.ReplaceAll($e_name.text, "\"", ""))}
+;
+
+rmgroup_f: RMGRP NAME IGUAL e_name=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)    {Program.Rmgroup(strings.ReplaceAll($e_name.text, "\"", ""))}
 ;
 
 mkuser_f: MKUSR mkuserparam+    {
@@ -250,6 +254,7 @@ LOGOUT:     L O G O U T;
 MKGRP:      M K G R P;
 MKUSR:      M K U S R;
 RMUSR:      R M U S R;
+RMGRP:      R M G R P;
 MKDIR:      M K D I R;
 
 // Parametros

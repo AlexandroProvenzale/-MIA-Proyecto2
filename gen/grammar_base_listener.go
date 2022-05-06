@@ -111,6 +111,12 @@ func (s *BaseGrammarListener) EnterMkgroup_f(ctx *Mkgroup_fContext) {}
 // ExitMkgroup_f is called when production mkgroup_f is exited.
 func (s *BaseGrammarListener) ExitMkgroup_f(ctx *Mkgroup_fContext) {}
 
+// EnterRmgroup_f is called when production rmgroup_f is entered.
+func (s *BaseGrammarListener) EnterRmgroup_f(ctx *Rmgroup_fContext) {}
+
+// ExitRmgroup_f is called when production rmgroup_f is exited.
+func (s *BaseGrammarListener) ExitRmgroup_f(ctx *Rmgroup_fContext) {}
+
 // EnterMkuser_f is called when production mkuser_f is entered.
 func (s *BaseGrammarListener) EnterMkuser_f(ctx *Mkuser_fContext) {}
 

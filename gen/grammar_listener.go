@@ -53,6 +53,9 @@ type GrammarListener interface {
 	// EnterMkgroup_f is called when entering the mkgroup_f production.
 	EnterMkgroup_f(c *Mkgroup_fContext)
 
+	// EnterRmgroup_f is called when entering the rmgroup_f production.
+	EnterRmgroup_f(c *Rmgroup_fContext)
+
 	// EnterMkuser_f is called when entering the mkuser_f production.
 	EnterMkuser_f(c *Mkuser_fContext)
 
@@ -118,6 +121,9 @@ type GrammarListener interface {
 
 	// ExitMkgroup_f is called when exiting the mkgroup_f production.
 	ExitMkgroup_f(c *Mkgroup_fContext)
+
+	// ExitRmgroup_f is called when exiting the rmgroup_f production.
+	ExitRmgroup_f(c *Rmgroup_fContext)
 
 	// ExitMkuser_f is called when exiting the mkuser_f production.
 	ExitMkuser_f(c *Mkuser_fContext)
