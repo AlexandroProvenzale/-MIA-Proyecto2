@@ -145,13 +145,17 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 	*digraph += "inode" + strconv.Itoa(*inodeCounter) + "[label=<\n" +
 		"<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n" +
 		"<TR>\n<TD COLSPAN=\"2\" BGCOLOR=\"cornflowerblue\">Inodo " + strconv.Itoa(*inodeCounter) + "</TD>\n</TR>\n" +
+		"<TR>\n<TD>UID</TD>\n<TD>" + string(inodoActual.UID) + "</TD>\n</TR>\n" +
+		"<TR>\n<TD>GID</TD>\n<TD>" + string(inodoActual.GID) + "</TD>\n</TR>\n" +
 		"<TR>\n<TD>Type</TD>\n<TD>" + string(inodoActual.Type) + "</TD>\n</TR>\n" +
 		"<TR>\n<TD>Size</TD>\n<TD>" + string(inodoActual.Size) + "</TD>\n</TR>\n" +
-		"<TR>\n<TD>Perm</TD>\n<TD>" + string(inodoActual.Perm) + "</TD>\n</TR>\n"
+		"<TR>\n<TD>Perm</TD>\n<TD>" + string(inodoActual.Perm) + "</TD>\n</TR>\n" +
+		"<TR>\n<TD>Mtime</TD>\n<TD>" + string(inodoActual.Mtime) + "</TD>\n</TR>\n" +
+		"<TR>\n<TD>Ctime</TD>\n<TD>" + string(inodoActual.Ctime) + "</TD>\n</TR>\n"
 	block := BytesToIntArray(inodoActual.Block)
 
 	for i := range block {
-		*digraph += "<TR>\n<TD>AD" + strconv.Itoa(i) + "</TD>\n<TD PORT=\"i" + strconv.Itoa(i) + "\">" + strconv.Itoa(block[i]) + "</TD>\n</TR>\n"
+		*digraph += "<TR>\n<TD PORT=\"ii" + strconv.Itoa(i) + "\">AD" + strconv.Itoa(i) + "</TD>\n<TD PORT=\"id" + strconv.Itoa(i) + "\">" + strconv.Itoa(block[i]) + "</TD>\n</TR>\n"
 	}
 
 	*digraph += "</TABLE>>];\n"
@@ -161,13 +165,13 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 			break
 		}
 
-		*blockCounter += 1
+		*blockCounter = block[i]
 		initBlo := BytesToInt(sb.BlockStart) + BytesToInt(sb.BlockSize)**blockCounter
 		if _, err := file.Seek(int64(initBlo), 0); err != nil {
 			log.Fatal(err)
 			return
 		}
-		*digraph += "inode" + strconv.Itoa(*inodeCounter) + ":i" + strconv.Itoa(i) + " -> block" + strconv.Itoa(*blockCounter) + ":b" + strconv.Itoa(block[i]) + "\n"
+		*digraph += "inode" + strconv.Itoa(*inodeCounter) + ":id" + strconv.Itoa(i) + " -> block" + strconv.Itoa(*blockCounter) + ":bi" + ";\n"
 		if BytesToInt(inodoActual.Type) == 0 {
 			var bloqueCarpeta BloqueCarpeta
 			bloCarpBytes := make([]byte, BytesToInt(sb.BlockSize))
@@ -183,26 +187,27 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 			}
 
 			*digraph += "block" + strconv.Itoa(*blockCounter) + "[label=<\n" +
-				"<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n" +
+				"<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n" +
 				"<TR>\n<TD COLSPAN=\"2\" BGCOLOR=\"#ff6363\">Bloque carpeta " + strconv.Itoa(*blockCounter) + "</TD>\n</TR>\n"
 
-			for i := range bloqueCarpeta.BContent {
-				if string(bloqueCarpeta.BContent[i].Name) != "" {
-					*digraph += "<TR>\n<TD>" + string(bloqueCarpeta.BContent[i].Name) + "</TD>\n<TD PORT=\"b" + strconv.Itoa(i) + "\">" + string(bloqueCarpeta.BContent[i].Inodo) + "</TD>\n</TR>\n"
+			for j := range bloqueCarpeta.BContent {
+				if string(bloqueCarpeta.BContent[j].Name) != "" {
+					*digraph += "<TR>\n<TD PORT=\"bi" + strconv.Itoa(j) + "\">" + string(bloqueCarpeta.BContent[j].Name) + "</TD>\n<TD PORT=\"bd" + strconv.Itoa(j) + "\">" + string(bloqueCarpeta.BContent[j].Inodo) + "</TD>\n</TR>\n"
 				} else {
-					*digraph += "<TR>\n<TD>-</TD>\n<TD PORT=\"b" + strconv.Itoa(i) + "\">-1</TD>\n</TR>\n"
+					*digraph += "<TR>\n<TD PORT=\"bi" + strconv.Itoa(j) + "\">-</TD>\n<TD PORT=\"bd" + strconv.Itoa(j) + "\">-1</TD>\n</TR>\n"
 				}
 			}
 
 			*digraph += "</TABLE>>];\n"
 
-			for i := range bloqueCarpeta.BContent {
-				if string(bloqueCarpeta.BContent[i].Inodo) == "-1" {
+			for j := range bloqueCarpeta.BContent {
+				if string(bloqueCarpeta.BContent[j].Inodo) == "-1" {
 					break
-				} else if string(bloqueCarpeta.BContent[i].Name) != "." && string(bloqueCarpeta.BContent[i].Name) != ".." {
+				} else if string(bloqueCarpeta.BContent[j].Name) != "." && string(bloqueCarpeta.BContent[j].Name) != ".." {
 					//inodeCounter
-					*inodeCounter += 1
-					*digraph += "block" + strconv.Itoa(*blockCounter) + ":b" + strconv.Itoa(i) + " -> inode" + strconv.Itoa(*inodeCounter) + ":i" + string(bloqueCarpeta.BContent[i].Inodo) + "\n"
+					*inodeCounter = BytesToInt(bloqueCarpeta.BContent[j].Inodo)
+					*blockCounter = block[i]
+					*digraph += "block" + strconv.Itoa(*blockCounter) + ":bd" + strconv.Itoa(j) + " -> inode" + strconv.Itoa(*inodeCounter) + ";\n"
 					initIno := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)**inodeCounter
 					recursivamente(sb, digraph, initIno, inodeCounter, blockCounter, file)
 				}

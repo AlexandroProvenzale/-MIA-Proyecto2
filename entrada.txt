@@ -87,5 +87,6 @@ Mkdir  -path=/home/archivos/mia/fase2/a43
 Mkdir  -path=/home/archivos/mia/fase2/a44
 Mkdir  -path=/home/archivos/mia/fase2/a45
 Mkdir  -path=/home/archivos/mia/fase2/a46
+Mkdir  -path=/home/archivos/mia/fase2/a46
 
 rep -id=121a -Path="/home/parte2/inicial/ext3_tree_1.png" -name=tree

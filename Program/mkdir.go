@@ -155,6 +155,10 @@ func buscandoRecursivamente(sb *SuperBloque, rutas []string, initInode int, inod
 				} else if string(bloqueCarpeta.BContent[j].Name) != "." && string(bloqueCarpeta.BContent[j].Name) != ".." {
 					//inodeActual
 					if string(bloqueCarpeta.BContent[j].Name) == rutas[*pathCounter] {
+						if rutas[*pathCounter] == rutas[len(rutas)-1] {
+							fmt.Println("Error", rutas[*pathCounter], "ya existe en esta carpeta")
+							return
+						}
 						*pathCounter += 1
 						// Hacer algo cuando encuentra la carpeta dentro de un bloque de carpetas
 						*inodeActual = BytesToInt(bloqueCarpeta.BContent[j].Inodo)
@@ -167,6 +171,9 @@ func buscandoRecursivamente(sb *SuperBloque, rutas []string, initInode int, inod
 			if !existeRuta {
 				if rutas[*pathCounter] == rutas[len(rutas)-1] {
 					for j := range bloqueCarpeta.BContent {
+						if string(bloqueCarpeta.BContent[j].Name) == rutas[*pathCounter] {
+							log.Fatal("ERROR", rutas[*pathCounter], "ya existe")
+						}
 						if string(bloqueCarpeta.BContent[j].Inodo) == "-1" {
 							bloqueCarpeta.BContent[j].Name = []byte(rutas[*pathCounter])
 							bloqueCarpeta.BContent[j].Inodo = sb.FirstInode
@@ -209,6 +216,7 @@ func buscandoRecursivamente(sb *SuperBloque, rutas []string, initInode int, inod
 		if rutas[*pathCounter] == rutas[len(rutas)-1] {
 			// Si la ruta es la última, osea la que se está creando
 			for i := range block {
+
 				if block[i] == -1 {
 					block[i] = BytesToInt(sb.FirstBlock)
 					inodoActual.Block = IntArrayToBytes(block)
