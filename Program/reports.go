@@ -39,7 +39,13 @@ func Reportar(rep InfoRep) {
 			return
 		}
 		ReporteFile(path, partName, rep.Ruta)
+	} else {
+		ReportDisk(path, partName, rep.Path)
 	}
+}
+
+func ReportDisk(path, partName, repo string) {
+	
 }
 
 func ReporteFile(path, partName, ruta string) {
