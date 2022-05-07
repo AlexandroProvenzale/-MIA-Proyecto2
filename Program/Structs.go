@@ -48,8 +48,8 @@ type InfoMkuser struct {
 
 type InfoMkfile struct {
 	Path string
-	R    string
-	Size string
+	R    bool
+	Size int
 	Cont string
 }
 

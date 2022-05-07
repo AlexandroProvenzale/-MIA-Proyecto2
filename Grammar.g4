@@ -16,6 +16,7 @@ options {
     var info_MKFS Program.InfoMkfs
     var info_LOGIN Program.InfoLogin
     var info_MKUSER Program.InfoMkuser
+    var info_MKFILE Program.InfoMkfile
     var info_MKDIR Program.InfoMkdir
     var info_REP Program.InfoRep
 
@@ -56,6 +57,13 @@ options {
         MKUSER.Pass = ""
     }
 
+    func initializeMKFILE(MKFILE *Program.InfoMkfile) {
+            MKFILE.Path = ""
+            MKFILE.R    = false
+            MKFILE.Size = 0
+            MKFILE.Cont = ""
+    }
+
     func initializeMKDIR(MKDIR *Program.InfoMkdir) {
         MKDIR.Path = ""
         MKDIR.P    = false
@@ -85,6 +93,7 @@ comando: mkdisk_f NEWLINE
        | rmgroup_f NEWLINE
        | mkuser_f NEWLINE
        | rmuser_f NEWLINE
+       | mkfile_f NEWLINE
        | mkdir_f NEWLINE
        | rep_f NEWLINE
        | NEWLINE
@@ -185,6 +194,19 @@ mkuserparam:
 |   GRP IGUAL e_group=(IDENTIFICADOR|COMPLEMENTO|ENTERO|E_USRS)     {info_MKUSER.Grp = strings.ReplaceAll($e_group.text, "\"", "")}
 ;
 
+mkfile_f: MKFILE mkfileparam+   {
+                                 Program.EscribirArchivo(info_MKFILE)
+                                 initializeMKFILE(&info_MKFILE)
+                                }
+;
+
+mkfileparam:
+    PATH IGUAL E_PATH      {info_MKFILE.Path = strings.ReplaceAll($E_PATH.text, "\"", "")}
+|   '-'('r'|'R')           {info_MKFILE.R = true}
+|   SIZE IGUAL ENTERO      {info_MKFILE.Size = $ENTERO.int}
+|   CONT IGUAL E_PATH      {info_MKFILE.Cont = strings.ReplaceAll($E_PATH.text, "\"", "")}
+;
+
 mkdir_f: MKDIR mkdirparam+  {
                              Program.EscribirDirectorio(info_MKDIR)
                              initializeMKDIR(&info_MKDIR)
@@ -193,7 +215,7 @@ mkdir_f: MKDIR mkdirparam+  {
 
 mkdirparam:
     PATH IGUAL E_PATHH     {info_MKDIR.Path = strings.ReplaceAll($E_PATHH.text, "\"", "")}
-|   '-'('p'|'P')             {info_MKDIR.P = true}
+|   '-'('p'|'P')           {info_MKDIR.P = true}
 ;
 
 rep_f: REP repparam+    {
@@ -256,6 +278,7 @@ MKUSR:      M K U S R;
 RMUSR:      R M U S R;
 RMGRP:      R M G R P;
 MKDIR:      M K D I R;
+MKFILE:     M K F I L E;
 
 // Parametros
 SIZE:       '-' S I Z E;
@@ -273,6 +296,7 @@ PASSW:      '-' P A S S W O R D;
 PWD:        '-' P W D;
 GRP:        '-' G R P;
 RUTA:       '-' R U T A;
+CONT:       '-' C O N T;
 
 // Entradas
 E_FIT:  B F
@@ -304,7 +328,7 @@ E_REP: D I S K
 
 PATH1:          '/' IDENTIFICADOR ('/' IDENTIFICADOR)* TERMINAL;
 PATH2:          '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* TERMINAL '"';
-TERMINAL:       '.' (D K | T X T | D S K | J P G | P N G);
+TERMINAL:       '.' (D K | T X T | D S K | J P G | P N G | P D F);
 PATHH1:         '/' IDENTIFICADOR ('/' IDENTIFICADOR)*;
 PATHH2:         '"' '/' IDENTIFICADOR ((' ')* COMPLEMENTO)* ('/' IDENTIFICADOR ((' ')* COMPLEMENTO)*)* '"';
 
