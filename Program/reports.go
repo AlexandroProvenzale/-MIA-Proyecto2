@@ -146,7 +146,7 @@ func ReportDisk(path, partName, repo string) {
 	finalReporte := "}\"] ;\n    }\n}"
 
 	reporteCompleto := inicioReporte + discoReporte + medioReporte + finalReporte
-	f, err := os.Create("reporteTree.dot")
+	f, err := os.Create("reporteDisk.dot")
 	if err != nil {
 		log.Fatal(err)
 	}

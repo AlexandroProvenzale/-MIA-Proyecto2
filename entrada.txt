@@ -9,6 +9,8 @@ mount -path=/home/proven/mia/disco.dk   -name=Part2
 mount -path=/home/proven/mia/disco.dk   -name=Part3
 mount -path=/home/proven/mia/disco.dk   -name=Part4
 
+rep -id=121a -Path="/home/proven/mia/ext.png" -name=disk
+
 #MKFS A PARTICIONES
 mkfs -type=fast -id=121a
 mkfs -type=full -id=121c
