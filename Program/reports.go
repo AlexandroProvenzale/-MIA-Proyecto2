@@ -45,7 +45,124 @@ func Reportar(rep InfoRep) {
 }
 
 func ReportDisk(path, partName, repo string) {
-	
+	file, err := os.OpenFile(path, os.O_RDWR, 0777) // Abrimos el archivo
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	defer func(file *os.File) { // Posponemos su cierre hasta que el método termine su ejecución
+		err := file.Close()
+		if err != nil {
+			fmt.Println("Error: Problema al cerrar el disco")
+			return
+		}
+	}(file)
+
+	if _, err := file.Seek(0, 0); err != nil { // Situamos el puntero en el principio
+		log.Fatal(err)
+		return
+	}
+	var mbr MBR
+	mbrbytes := make([]byte, unsafe.Sizeof(mbr))
+	if _, err := file.Read(mbrbytes); err != nil {
+		log.Fatal(err)
+		return
+	}
+	buff := bytes.NewBuffer(mbrbytes)
+	dec := gob.NewDecoder(buff)
+	if err := dec.Decode(&mbr); err != nil { // Obtenemos la información del mbr para buscar la partición
+		log.Fatal(err)
+		return
+	}
+
+	var particion1 string
+	var particion2 string
+	var particion3 string
+	var particion4 string
+	var libre1 int
+	var libre2 int
+	var libre3 int
+	var libre4 int
+	var libre5 int
+	var espacioLibre1 string
+	var espacioLibre2 string
+	var espacioLibre3 string
+	var espacioLibre4 string
+	var espacioLibre5 string
+
+	var particionesOrden [4]Partition
+	for i := 0; i < 4; i++ {
+		particionesOrden[i] = mbr.Partition[i]
+	}
+	var auxiliar Partition
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 3; j++ {
+			if BytesToInt(particionesOrden[j].Start) > BytesToInt(particionesOrden[j+1].Start) {
+				auxiliar = particionesOrden[j]
+				particionesOrden[j] = particionesOrden[j+1]
+				particionesOrden[j+1] = auxiliar
+			}
+		}
+	}
+
+	if BytesToInt(particionesOrden[0].Start) != BytesToInt(mbr.Tamano) {
+		particion1 = "|" + string(particionesOrden[0].Name) + "\\n" + strconv.Itoa(BytesToInt(particionesOrden[0].Size)/BytesToInt(mbr.Tamano))
+	}
+	if BytesToInt(particionesOrden[1].Start) != BytesToInt(mbr.Tamano) {
+		particion2 = "|" + string(particionesOrden[1].Name) + "\\n" + strconv.Itoa(BytesToInt(particionesOrden[1].Size)/BytesToInt(mbr.Tamano))
+	}
+	if BytesToInt(particionesOrden[2].Start) != BytesToInt(mbr.Tamano) {
+		particion3 = "|" + string(particionesOrden[2].Name) + "\\n" + strconv.Itoa(BytesToInt(particionesOrden[2].Size)/BytesToInt(mbr.Tamano))
+	}
+	if BytesToInt(particionesOrden[3].Start) != BytesToInt(mbr.Tamano) {
+		particion4 = "|" + string(particionesOrden[3].Name) + "\\n" + strconv.Itoa(BytesToInt(particionesOrden[3].Size)/BytesToInt(mbr.Tamano))
+	}
+	libre1 = BytesToInt(particionesOrden[0].Start) - int(unsafe.Sizeof(mbr))
+	libre2 = BytesToInt(particionesOrden[1].Start) - (BytesToInt(particionesOrden[0].Start) + BytesToInt(particionesOrden[0].Start))
+	libre3 = BytesToInt(particionesOrden[2].Start) - (BytesToInt(particionesOrden[1].Start) + BytesToInt(particionesOrden[1].Start))
+	libre4 = BytesToInt(particionesOrden[3].Start) - (BytesToInt(particionesOrden[2].Start) + BytesToInt(particionesOrden[2].Start))
+	libre5 = BytesToInt(mbr.Tamano) - (BytesToInt(particionesOrden[3].Start) + BytesToInt(particionesOrden[3].Size))
+
+	if libre1 != 0 {
+		espacioLibre1 = "|libre\\n" + strconv.Itoa(libre1/BytesToInt(mbr.Tamano))
+	}
+	if libre2 != 0 {
+		espacioLibre1 = "|libre\\n" + strconv.Itoa(libre2/BytesToInt(mbr.Tamano))
+	}
+	if libre3 != 0 {
+		espacioLibre1 = "|libre\\n" + strconv.Itoa(libre3/BytesToInt(mbr.Tamano))
+	}
+	if libre4 != 0 {
+		espacioLibre1 = "|libre\\n" + strconv.Itoa(libre4/BytesToInt(mbr.Tamano))
+	}
+	if libre5 != 0 {
+		espacioLibre1 = "|libre\\n" + strconv.Itoa(libre5/BytesToInt(mbr.Tamano))
+	}
+
+	inicioReporte := "digraph g {\n        rankdir = LR;\n    subgraph cluster0\n    {\n        "
+	discoReporte := "Array [ shape = record, label = \"{"
+	medioReporte := "MBR" + espacioLibre1 + particion1 + espacioLibre2 + particion2 + espacioLibre3 + particion3 +
+		espacioLibre4 + particion4 + espacioLibre5
+	finalReporte := "}\"] ;\n    }\n}"
+
+	reporteCompleto := inicioReporte + discoReporte + medioReporte + finalReporte
+	f, err := os.Create("reporteTree.dot")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(f)
+	_, err2 := f.WriteString(reporteCompleto)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	command := "dot -Tpng reporteDisk.dot -o \"" + repo + "\""
+	System(command)
+	fmt.Println("Reporte disk creado con éxito en", repo)
 }
 
 func ReporteFile(path, partName, ruta string) {
