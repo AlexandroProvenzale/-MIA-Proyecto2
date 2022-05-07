@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"reflect"
 	"strconv"
 	"strings"
+	"syscall"
 	"unsafe"
 )
 
@@ -254,22 +256,10 @@ func ReporteTree(path, partName, repo string) {
 		return
 	}
 	fmt.Println("-----------------------REPORTE TREE-----------------------")
-	fmt.Println("-------------------- Disco encontrado --------------------")
-	fmt.Println("Fecha de creación:", string(mbr.FechaCreacion))
-	fmt.Println("Signature:", string(mbr.DskSignature))
-	fmt.Println("Size:", string(mbr.Tamano))
-	fmt.Println("----------------------------------------------------------")
 	var partition Partition
 	for j := 0; j < 4; j++ { // Buscamos la partición con el nombre almacenado que respecta a la del ID ingresado
 		partition = mbr.Partition[j]
 		if string(partition.Status) == "1" && string(partition.Name) == partName {
-			fmt.Println("Partición:", j+1, "del disco, encontrada")
-			fmt.Println("Estado:", string(partition.Status))
-			fmt.Println("Tamaño:", string(partition.Size))
-			fmt.Println("Fit:", string(partition.Fit))
-			fmt.Println("Nombre:", string(partition.Name))
-			fmt.Println("Start:", string(partition.Start))
-			fmt.Println("----------------------------------------------------------")
 			break
 		}
 	}
@@ -310,7 +300,48 @@ func ReporteTree(path, partName, repo string) {
 	initInode := BytesToInt(sb.InodeStart)
 	recursivamente(&sb, &digraph, initInode, &inodeCounter, &blockCounter, file)
 	digraph += "}"
-	fmt.Println(digraph)
+	f, err := os.Create("reporteTree.dot")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(f)
+	_, err2 := f.WriteString(digraph)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	command := "dot -Tpng reporteTree.dot -o \"" + repo + "\""
+	System(command)
+	fmt.Println("Reporte tree creado con éxito en", repo)
+}
+
+func System(cmd string) int {
+	c := exec.Command("sh", "-c", cmd)
+	c.Stdin = os.Stdin
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	err := c.Run()
+
+	if err == nil {
+		return 0
+	}
+
+	// Figure out the exit code
+	if ws, ok := c.ProcessState.Sys().(syscall.WaitStatus); ok {
+		if ws.Exited() {
+			return ws.ExitStatus()
+		}
+
+		if ws.Signaled() {
+			return -int(ws.Signal())
+		}
+	}
+
+	return -1
 }
 
 func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounter, blockCounter *int, file *os.File) {
@@ -360,7 +391,7 @@ func recursivamente(sb *SuperBloque, digraph *string, initInode int, inodeCounte
 			log.Fatal(err)
 			return
 		}
-		*digraph += "inode" + strconv.Itoa(*inodeCounter) + ":id" + strconv.Itoa(i) + " -> block" + strconv.Itoa(*blockCounter) + ":bi" + ";\n"
+		*digraph += "inode" + strconv.Itoa(*inodeCounter) + ":id" + strconv.Itoa(i) + " -> block" + strconv.Itoa(*blockCounter) + ";\n"
 		if BytesToInt(inodoActual.Type) == 0 {
 			var bloqueCarpeta BloqueCarpeta
 			bloCarpBytes := make([]byte, BytesToInt(sb.BlockSize))

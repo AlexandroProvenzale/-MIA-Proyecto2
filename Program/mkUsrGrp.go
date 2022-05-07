@@ -476,22 +476,10 @@ func Rmuser(user string) {
 		return
 	}
 	fmt.Println("--------------------------RMUSER--------------------------")
-	fmt.Println("-------------------- Disco encontrado --------------------")
-	fmt.Println("Fecha de creación:", string(mbr.FechaCreacion))
-	fmt.Println("Signature:", string(mbr.DskSignature))
-	fmt.Println("Size:", string(mbr.Tamano))
-	fmt.Println("----------------------------------------------------------")
 	var partition Partition
 	for j := 0; j < 4; j++ { // Buscamos la partición con el nombre almacenado que respecta a la del ID ingresado
 		partition = mbr.Partition[j]
 		if string(partition.Status) == "1" && string(partition.Name) == partName {
-			fmt.Println("Partición:", j+1, "del disco, encontrada")
-			fmt.Println("Estado:", string(partition.Status))
-			fmt.Println("Tamaño:", string(partition.Size))
-			fmt.Println("Fit:", string(partition.Fit))
-			fmt.Println("Nombre:", string(partition.Name))
-			fmt.Println("Start:", string(partition.Start))
-			fmt.Println("----------------------------------------------------------")
 			break
 		}
 	}
@@ -677,22 +665,10 @@ func Rmgroup(user string) {
 		return
 	}
 	fmt.Println("--------------------------RMGROUP--------------------------")
-	fmt.Println("-------------------- Disco encontrado --------------------")
-	fmt.Println("Fecha de creación:", string(mbr.FechaCreacion))
-	fmt.Println("Signature:", string(mbr.DskSignature))
-	fmt.Println("Size:", string(mbr.Tamano))
-	fmt.Println("----------------------------------------------------------")
 	var partition Partition
 	for j := 0; j < 4; j++ { // Buscamos la partición con el nombre almacenado que respecta a la del ID ingresado
 		partition = mbr.Partition[j]
 		if string(partition.Status) == "1" && string(partition.Name) == partName {
-			fmt.Println("Partición:", j+1, "del disco, encontrada")
-			fmt.Println("Estado:", string(partition.Status))
-			fmt.Println("Tamaño:", string(partition.Size))
-			fmt.Println("Fit:", string(partition.Fit))
-			fmt.Println("Nombre:", string(partition.Name))
-			fmt.Println("Start:", string(partition.Start))
-			fmt.Println("----------------------------------------------------------")
 			break
 		}
 	}

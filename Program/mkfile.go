@@ -55,22 +55,10 @@ func EscribirArchivo(fil InfoMkfile) {
 		return
 	}
 	fmt.Println("--------------------------MKFILE--------------------------")
-	fmt.Println("-------------------- Disco encontrado --------------------")
-	fmt.Println("Fecha de creación:", string(mbr.FechaCreacion))
-	fmt.Println("Signature:", string(mbr.DskSignature))
-	fmt.Println("Size:", string(mbr.Tamano))
-	fmt.Println("----------------------------------------------------------")
 	var partition Partition
 	for j := 0; j < 4; j++ { // Buscamos la partición con el nombre almacenado que respecta a la del ID ingresado
 		partition = mbr.Partition[j]
 		if string(partition.Status) == "1" && string(partition.Name) == partName {
-			fmt.Println("Partición:", j+1, "del disco, encontrada")
-			fmt.Println("Estado:", string(partition.Status))
-			fmt.Println("Tamaño:", string(partition.Size))
-			fmt.Println("Fit:", string(partition.Fit))
-			fmt.Println("Nombre:", string(partition.Name))
-			fmt.Println("Start:", string(partition.Start))
-			fmt.Println("----------------------------------------------------------")
 			break
 		}
 	}
@@ -112,10 +100,10 @@ func EscribirArchivo(fil InfoMkfile) {
 	} else {
 		tamArchivo = fil.Size
 	}
-	buscandoRecursivamenteFile(&sb, rutas, initInode, &inodeActual, &blockActual, &pathCounter, fil.R, BytesToInt(partition.Start), file, false, contenido, tamArchivo)
+	buscandoRecursivamenteFile(&sb, rutas, initInode, &inodeActual, &blockActual, &pathCounter, fil.R, BytesToInt(partition.Start), file, false, contenido, tamArchivo, fil.Path)
 }
 
-func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, inodeActual, blockActual, pathCounter *int, permiso bool, sbStart int, file *os.File, existeRuta bool, contenido string, size int) {
+func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, inodeActual, blockActual, pathCounter *int, permiso bool, sbStart int, file *os.File, existeRuta bool, contenido string, size int, nombreArchivo string) {
 	if _, err := file.Seek(int64(initInode), 0); err != nil {
 		log.Fatal(err)
 		return
@@ -176,7 +164,7 @@ func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, 
 						// Hacer algo cuando encuentra la carpeta dentro de un bloque de carpetas
 						*inodeActual = BytesToInt(bloqueCarpeta.BContent[j].Inodo)
 						initIn := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)**inodeActual
-						buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size)
+						buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size, nombreArchivo)
 						return
 					}
 				}
@@ -185,7 +173,8 @@ func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, 
 				if rutas[*pathCounter] == rutas[len(rutas)-1] {
 					for j := range bloqueCarpeta.BContent {
 						if string(bloqueCarpeta.BContent[j].Name) == rutas[*pathCounter] {
-							log.Fatal("ERROR", rutas[*pathCounter], "ya existe")
+							fmt.Println("ERROR", rutas[*pathCounter], "ya existe")
+							return
 						}
 						if string(bloqueCarpeta.BContent[j].Inodo) == "-1" {
 							bloqueCarpeta.BContent[j].Name = []byte(rutas[*pathCounter])
@@ -213,12 +202,12 @@ func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, 
 								*inodeActual = BytesToInt(bloqueCarpeta.BContent[j].Inodo)
 								*pathCounter += 1
 								initIn := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)**inodeActual
-								buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size)
+								buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size, nombreArchivo)
 								return
 							}
 						}
 					} else {
-						log.Fatal("ERROR: La ruta ingresada no existe, hace falta parámetro -R para crearla")
+						fmt.Println("ERROR: La ruta ingresada no existe, hace falta parámetro -R para crearla")
 						return
 					}
 				}
@@ -276,17 +265,18 @@ func buscandoRecursivamenteFile(sb *SuperBloque, rutas []string, initInode int, 
 						*inodeActual = BytesToInt(bloqueApuntador.BContent[0].Inodo)
 						*pathCounter += 1
 						initIn := BytesToInt(sb.InodeStart) + BytesToInt(sb.InodeSize)**inodeActual
-						buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size)
+						buscandoRecursivamenteFile(sb, rutas, initIn, inodeActual, blockActual, pathCounter, permiso, sbStart, file, existeRuta, contenido, size, nombreArchivo)
 						return
 					}
 				}
 
 			} else {
-				log.Fatal("ERROR: La ruta ingresada no existe, hace falta parámetro -R para crearla")
+				fmt.Println("ERROR: La ruta ingresada no existe, hace falta parámetro -R para crearla")
 				return
 			}
 		}
 	}
+	fmt.Println("El archivo", nombreArchivo, "se creo con éxito")
 }
 
 func readLines(path string) string {

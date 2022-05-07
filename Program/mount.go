@@ -104,9 +104,25 @@ func MontarDisco(disco InfoMount) {
 			DiscosM[i].Partitions[x].Identificador = "12" + strconv.Itoa(DiscosM[i].Number) + DiscosM[i].Partitions[x].Letra
 			contadorParticion = x
 			break
+		} else {
+			if mPartition.Name == string(mbr.Partition[actualPartition].Name) {
+				fmt.Println("ERROR: La partición", string(mbr.Partition[actualPartition].Name), "ya fue montada")
+				return
+			}
 		}
 	}
 	fmt.Println("El identificador de esta partición es:", DiscosM[i].Partitions[contadorParticion].Identificador)
-	fmt.Println("Disco montado")
+	fmt.Println("Partición montada")
 	fmt.Println("----------------------------------------------------------")
+	fmt.Println("-Listado de particiones montadas-")
+	for x := range DiscosM {
+		if DiscosM[x].State == 1 {
+			fmt.Println("Montadas en el disco", DiscosM[x].Path, ":")
+			for j := range DiscosM[x].Partitions {
+				if DiscosM[x].Partitions[j].State == 1 {
+					fmt.Println("	*", DiscosM[x].Partitions[j].Name)
+				}
+			}
+		}
+	}
 }

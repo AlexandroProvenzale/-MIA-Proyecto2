@@ -216,7 +216,7 @@ mkdir_f: MKDIR mkdirparam+  {
 
 mkdirparam:
     PATH IGUAL E_PATHH     {info_MKDIR.Path = strings.ReplaceAll($E_PATHH.text, "\"", "")}
-|   '-'('p'|'P')           {info_MKDIR.P = true}
+|   PE           {info_MKDIR.P = true}
 ;
 
 rep_f: REP repparam+    {
@@ -301,6 +301,7 @@ PWD:        '-' P W D;
 GRP:        '-' G R P;
 RUTA:       '-' R U T A;
 CONT:       '-' C O N T;
+PE:         '-' P;
 
 // Entradas
 E_FIT:  B F

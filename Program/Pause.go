@@ -8,6 +8,6 @@ func PausarPrograma() {
 	fmt.Println("Pausado")
 	fmt.Println("Presiona una tecla")
 	fmt.Println("----------------------------------------------------------")
-	fmt.Scanf("%\n", &tecla)
+	_, _ = fmt.Scanf("%s\n", &tecla)
 	return
 }
