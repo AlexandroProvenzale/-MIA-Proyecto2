@@ -134,7 +134,7 @@ rep -id=121a -Path="/home/parte2/reportes/tree_3.png" -name=tree
 
 pause
 
-mkfile -path="/home/entrada.txt" -cont="/bcont.txt"
+mkfile -path="/home/entrada.txt" -cont="/home/ec2-user/-MIA-Proyecto2/bcont.txt"
 
 pause
 
