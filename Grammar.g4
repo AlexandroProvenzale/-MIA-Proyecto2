@@ -96,6 +96,7 @@ comando: mkdisk_f NEWLINE
        | mkfile_f NEWLINE
        | mkdir_f NEWLINE
        | rep_f NEWLINE
+       | pause_f NEWLINE
        | NEWLINE
 ;
 
@@ -229,6 +230,9 @@ repparam:
 |   PATH IGUAL E_PATH   {info_REP.Path = strings.ReplaceAll($E_PATH.text, "\"", "")}
 |   ID IGUAL E_ID       {info_REP.Id = $E_ID.text}
 |   RUTA IGUAL E_PATH   {info_REP.Ruta = strings.ReplaceAll($E_PATH.text, "\"", "")}
+;
+
+pause_f: PAUSES {Program.PausarPrograma()}
 ;
 
 // Tokens

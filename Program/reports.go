@@ -208,6 +208,7 @@ func busquedaFile(sb *SuperBloque, rutas []string, initInode int, inodeActual, b
 							fmt.Println("Contiene lo siguiente:")
 							fmt.Println("----------------------------------------------------------")
 							fmt.Println(contenidoArchivo)
+							fmt.Println("----------------------------------------------------------")
 						}
 						*pathCounter += 1
 						// Hacer algo cuando encuentra la carpeta dentro de un bloque de carpetas

@@ -170,3 +170,9 @@ func (s *BaseGrammarListener) EnterRepparam(ctx *RepparamContext) {}
 
 // ExitRepparam is called when production repparam is exited.
 func (s *BaseGrammarListener) ExitRepparam(ctx *RepparamContext) {}
+
+// EnterPause_f is called when production pause_f is entered.
+func (s *BaseGrammarListener) EnterPause_f(ctx *Pause_fContext) {}
+
+// ExitPause_f is called when production pause_f is exited.
+func (s *BaseGrammarListener) ExitPause_f(ctx *Pause_fContext) {}

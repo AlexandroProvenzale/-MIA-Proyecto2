@@ -9,6 +9,8 @@ mount -path=/home/proven/mia/disco.dk   -name=Part2
 mount -path=/home/proven/mia/disco.dk   -name=Part3
 mount -path=/home/proven/mia/disco.dk   -name=Part4
 
+pause
+
 #MKFS A PARTICIONES
 mkfs -type=fast -id=121a
 mkfs -type=full -id=121c

@@ -83,6 +83,9 @@ type GrammarListener interface {
 	// EnterRepparam is called when entering the repparam production.
 	EnterRepparam(c *RepparamContext)
 
+	// EnterPause_f is called when entering the pause_f production.
+	EnterPause_f(c *Pause_fContext)
+
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
@@ -157,4 +160,7 @@ type GrammarListener interface {
 
 	// ExitRepparam is called when exiting the repparam production.
 	ExitRepparam(c *RepparamContext)
+
+	// ExitPause_f is called when exiting the pause_f production.
+	ExitPause_f(c *Pause_fContext)
 }
