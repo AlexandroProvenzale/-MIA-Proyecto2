@@ -32,4 +32,5 @@ Mkusr -usuario="user4" -grp="Compi 2" -pwd=user4
 mkfile -r -path="/home/b1.txt" -size=75
 mkfile -cont=/home/proven/Calificacion/bcont.txt -path="/home/entrada.txt"
 
-rep -id=121a -Path="/home/parte2/rem/ext2_tree_1.png" -name=tree
+rep -id=121a -Path="/home/archivos/antes_perdida/users.txt" -ruta="/users.txt" -name=file
+rep -id=121a -Path="/home/archivos/antes_perdida/users.txt" -ruta="/home/entrada.txt" -name=file
