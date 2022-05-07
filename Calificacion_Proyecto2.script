@@ -18,14 +18,13 @@ pause
 
 #CREACION DE PARTICIONES
 #Debe dar error por que no existe particion extendida
-fdisk -type=L -unit=M -name=PartX -size=5 -path=/home/parte2/disco.dk
+
 
 fdisk -type=P -unit=M -name=Part1 -size=25 -path=/home/parte2/disco.dk
 fdisk -type=P -unit=M -name=Part2 -size=25 -path=/home/parte2/disco.dk
 fdisk -type=P -unit=M -name=Part3 -size=25 -path=/home/parte2/disco.dk
 fdisk -type=E -unit=M -name=Part4 -size=25 -path=/home/parte2/disco.dk
-fdisk -type=L -unit=M -name=Part5 -size=5 -path=/home/parte2/disco.dk
-fdisk -type=L -unit=M -name=Part6 -size=5 -path=/home/parte2/disco.dk
+
 
 pause
 
@@ -40,30 +39,31 @@ mount -path=/home/parte2/disco.dk -name=Part3
 pause
 
 #REPORTE DISCO
-rep -id=621a -Path=/home/parte1/particiones/disco.jpg -name=disk
+rep -id=121a -Path=/home/parte1/particiones/disco.png -name=disk
 
 pause
 
 # --- PARTE 2 ---
 
 #MKFS A PARTICIONES
-mkfs -type=fast -id=621a
+mkfs -type=fast -id=121a
+
 
 pause
 
 #REPORTES INICIALES
-rep -id=621a -Path="/home/parte2/reportes/tree_1.pdf" -name=tree
+rep -id=121a -Path="/home/parte2/reportes/tree_1.png" -name=tree
 
 pause
 
 #INICIO DE SESION
 #Debe dar error porque no existe el usuario roca
-Login -password=567 -usuario=roca -id=621a
+Login -password=567 -usuario=roca -id=121a
 
 #Debe dar error porque no existe usuario logeado
 logout
 
-Login -password=123 -usuario=root -id=621a
+Login -password=123 -usuario=root -id=121a
 
 pause
 
@@ -80,7 +80,7 @@ rmgrp -name=Arqui
 pause
 
 #REPORTES FILE
-rep -id=621a -Path="/home/parte2/reportes/users_1.txt" -ruta="/users.txt" -name=file
+rep -id=121a -Path="/home/parte2/reportes/users_1.txt" -ruta="/users.txt" -name=file
 
 pause
 
@@ -97,7 +97,7 @@ rmusr -usuario=user3
 pause
 
 #REPORTES FILE
-rep -id=621a -Path="/home/parte2/reportes/users_2.txt" -ruta="/users.txt" -name=file
+rep -id=121a -Path="/home/parte2/reportes/users_2.txt" -ruta="/users.txt" -name=file
 
 pause
 
@@ -112,7 +112,7 @@ Mkdir -path=/home/archivos/mia/carpeta2/a3
 pause
 
 #REPORTES TREE
-rep -id=621a -Path="/home/parte2/reportes/tree_2.pdf" -name=tree
+rep -id=121a -Path="/home/parte2/reportes/tree_2.png" -name=tree
 
 pause
 
@@ -130,19 +130,19 @@ mkfile -path="/home/d1.txt" -size=-25
 pause
 
 #REPORTES TREE
-rep -id=621a -Path="/home/parte2/reportes/tree_3.pdf" -name=tree
+rep -id=121a -Path="/home/parte2/reportes/tree_3.png" -name=tree
 
 pause
 
-mkfile -cont="/home/entrada.txt" -path="/home/bcont.txt"
+mkfile -path="/home/entrada.txt" -cont="/bcont.txt"
 
 pause
 
 #REPORTES TREE
-rep -id=621a -Path="/home/parte2/reportes/tree_4.pdf" -name=tree
+rep -id=121a -Path="/home/parte2/reportes/tree_4.png" -name=tree
 
 #REPORTES FILE
-rep -id=621a -Path="/home/parte2/reportes/users_3.txt" -ruta="/home/entrada.txt" -name=file
+rep -id=121a -Path="/home/parte2/reportes/users_3.txt" -ruta="/home/entrada.txt" -name=file
 
 pause
 
